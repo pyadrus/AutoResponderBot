@@ -6,9 +6,13 @@ from groq import Groq
 from settings import secrets
 
 def system_prompt():
+    """Промт для ИИ"""
+
     return """Ты бот помощник и ты должен помогать людям. Если тебе написали в не рабочее время, то ты должен ответить, что я отвечу позже"""
 
 async def get_chat_completion(message: Message):
+    """Возвращает ответ пользователя"""
+    
     client = Groq(api_key=secrets.openai_key)
 
     chat_completion = client.chat.completions.create(
@@ -28,7 +32,16 @@ async def get_chat_completion(message: Message):
 last_message_times = {}
 
 
-async def check_user_delay(user_id: int):
+async def check_user_delay(user_id: int) -> bool:
+    """
+   Проверяет, прошло ли достаточно времени с момента последнего сообщения пользователя.
+
+   Args:
+       user_id (int): Идентификатор пользователя.
+
+   Returns:
+       bool: True, если прошло достаточно времени, False - в противном случае.
+   """
     current_time = asyncio.get_event_loop().time()
 
     # Проверяем, если для пользователя есть сохраненное время последнего сообщения
@@ -43,6 +56,15 @@ async def check_user_delay(user_id: int):
 
 
 async def handle_business_message(message: Message):
+    """
+   Обрабатывает сообщение от пользователя.
+
+   Args:
+       message (Message): Объект сообщения.
+
+   Returns:
+       None
+   """
     if await check_user_delay(message.from_user.id) and message.text:
         answer = await get_chat_completion(message)
         await message.reply(answer)
