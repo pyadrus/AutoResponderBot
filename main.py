@@ -5,14 +5,12 @@ from aiogram.methods import DeleteWebhook
 
 from business_handler import handle_business_message
 from events import start_bot, stop_bot
-from business_middleware import BusinessMiddleware
 from settings import bot
 
 
 async def start():
+    """Start bot"""
     dp = Dispatcher()
-
-    dp.update.middleware(BusinessMiddleware())
 
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)

@@ -9,9 +9,6 @@ def stop_bot_message():
     return "Бот остановлен"
 
 
-
-
-
 async def start_bot():
     await bot.send_message(secrets.admin_id, start_bot_message())
 

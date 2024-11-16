@@ -17,6 +17,4 @@ class Secrets(BaseSettings):
 
 secrets = Secrets()
 
-# redis_conn = Redis(host=secrets.redis_host)
-
 bot = Bot(token=secrets.token)
