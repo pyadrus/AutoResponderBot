@@ -3,9 +3,10 @@ import asyncio
 from aiogram.types import Message
 from groq import Groq
 
-from events import system_prompt
 from settings import secrets
 
+def system_prompt():
+    return """Ты бот помощник и ты должен помогать людям. Если тебе написали в не рабочее время, то ты должен ответить, что я отвечу позже"""
 
 async def get_chat_completion(message: Message):
     client = Groq(api_key=secrets.openai_key)
