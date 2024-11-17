@@ -1,7 +1,7 @@
 from datetime import datetime
 from aiogram.types import Message
 from groq import Groq
-
+from loguru import logger
 from settings import secrets
 
 
@@ -32,14 +32,13 @@ async def get_chat_completion(message: Message, work):
 
 async def handle_business_message(message: Message):
     """
-   Обрабатывает сообщение от пользователя.
-
-   Args:
-       message (Message): Объект сообщения.
-
-   Returns:
-       None
-   """
+    Обрабатывает сообщение от пользователя. И проверяет рабочее время или нет. Если рабочее время, то бот отвечает пользователю, 
+    Если время не рабочее, то не отвечает. 
+    """
+    id_usser = message.from_user.id
+    user_name = message.from_user.username
+    
+    logger.info(f"Пользователь ID: {id_usser}. Username {user_name} написал сообщение.")
     
     # Создаем словарь с рабочим временем
     working_hours = {
@@ -58,7 +57,6 @@ async def handle_business_message(message: Message):
             (current_hour == working_hours['end']['hour'] and current_minute < working_hours['end']['minute']):
         print("Время рабочее.")
         work = "Время рабочее."
-    
     else:
         print("Время не рабочее.")
         work = "Время не рабочее."
