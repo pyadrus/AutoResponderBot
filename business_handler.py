@@ -14,16 +14,14 @@ def system_prompt(work):
 
 async def get_chat_completion(message: Message, work):
     """Возвращает ответ пользователя"""
-    
+
     client = Groq(api_key=secrets.openai_key)
 
     chat_completion = client.chat.completions.create(
-
         messages=[
             {"role": "system", "content": system_prompt(work)},
             {"role": "user", "content": message.text},
         ],
-
         model="llama3-groq-70b-8192-tool-use-preview",
     )
 
@@ -32,18 +30,18 @@ async def get_chat_completion(message: Message, work):
 
 async def handle_business_message(message: Message):
     """
-    Обрабатывает сообщение от пользователя. И проверяет рабочее время или нет. Если рабочее время, то бот отвечает пользователю, 
-    Если время не рабочее, то не отвечает. 
+    Обрабатывает сообщение от пользователя. И проверяет рабочее время или нет. Если рабочее время, то бот отвечает пользователю,
+    Если время не рабочее, то не отвечает.
     """
     id_usser = message.from_user.id
     user_name = message.from_user.username
-    
+
     logger.info(f"Пользователь ID: {id_usser}. Username {user_name} написал сообщение.")
-    
+
     # Создаем словарь с рабочим временем
     working_hours = {
-        'start': {'hour': 8, 'minute': 0},   # Начало рабочего дня в 09:00
-        'end': {'hour': 20, 'minute': 0}     # Окончание рабочего дня в 18:00
+        "start": {"hour": 8, "minute": 0},  # Начало рабочего дня в 09:00
+        "end": {"hour": 20, "minute": 0},  # Окончание рабочего дня в 18:00
     }
 
     # Получаем текущее время
@@ -52,15 +50,25 @@ async def handle_business_message(message: Message):
     current_minute = current_time.minute
 
     # Проверяем, находится ли текущее время внутри рабочего интервала
-    if (current_hour >= working_hours['start']['hour'] and current_hour <= working_hours['end']['hour']) or \
-            (current_hour == working_hours['start']['hour'] and current_minute >= working_hours['start']['minute']) or \
-            (current_hour == working_hours['end']['hour'] and current_minute < working_hours['end']['minute']):
+    if (
+        (
+            current_hour >= working_hours["start"]["hour"]
+            and current_hour <= working_hours["end"]["hour"]
+        )
+        or (
+            current_hour == working_hours["start"]["hour"]
+            and current_minute >= working_hours["start"]["minute"]
+        )
+        or (
+            current_hour == working_hours["end"]["hour"]
+            and current_minute < working_hours["end"]["minute"]
+        )
+    ):
         print("Время рабочее.")
         work = "Время рабочее."
     else:
         print("Время не рабочее.")
         work = "Время не рабочее."
-    
-    
+
     answer = await get_chat_completion(message, work)
     await message.reply(answer)
