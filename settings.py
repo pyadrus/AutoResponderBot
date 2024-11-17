@@ -6,9 +6,6 @@ class Secrets(BaseSettings):
     token: str
     admin_id: int
     openai_key: str
-    openai_base_url: str
-    redis_host: str
-    delay: int
 
     class Config:
         env_file = ".env"
