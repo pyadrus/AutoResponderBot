@@ -6,6 +6,7 @@ class Secrets(BaseSettings):
     token: str
     admin_id: int
     openai_key: str
+    giga_chat: str
 
     class Config:
         env_file = ".env"

@@ -1,47 +1,23 @@
 from datetime import datetime
+
 from aiogram.types import Message
-from groq import Groq
+
 from loguru import logger
-from settings import secrets
-
-
-def system_prompt(work):
-    """Промт для ИИ"""
-
-    return f"""Используй эмодзи в своих ответах. Твоя задача ответить пользователю, что вейчас время {work} и если вреня {work} - не рабочее, 
-               то отвечай, что вош вопросс будет расмотвен позже. Если рабочее время, то тапиши, что вопросс, будет расмотрен в ближайшее время."""
-
-
-async def get_chat_completion(message: Message, work):
-    """Возвращает ответ пользователя"""
-
-    client = Groq(api_key=secrets.openai_key)
-
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {"role": "system", "content": system_prompt(work)},
-            {"role": "user", "content": message.text},
-        ],
-        model="llama3-groq-70b-8192-tool-use-preview",
-    )
-
-    return chat_completion.choices[0].message.content
-
 
 async def handle_business_message(message: Message):
     """
     Обрабатывает сообщение от пользователя. И проверяет рабочее время или нет. Если рабочее время, то бот отвечает пользователю,
     Если время не рабочее, то не отвечает.
     """
-    id_usser = message.from_user.id
+    id_user = message.from_user.id
     user_name = message.from_user.username
 
-    logger.info(f"Пользователь ID: {id_usser}. Username {user_name} написал сообщение.")
+    logger.info(f"Пользователь ID: {id_user}. Username {user_name} написал сообщение.")
 
     # Создаем словарь с рабочим временем
     working_hours = {
-        "start": {"hour": 8, "minute": 0},  # Начало рабочего дня в 09:00
-        "end": {"hour": 20, "minute": 0},  # Окончание рабочего дня в 18:00
+        "start": {"hour": 9, "minute": 0},  # Начало рабочего дня в 09:00
+        "end": {"hour": 18, "minute": 0},   # Окончание рабочего дня в 18:00
     }
 
     # Получаем текущее время
@@ -51,24 +27,16 @@ async def handle_business_message(message: Message):
 
     # Проверяем, находится ли текущее время внутри рабочего интервала
     if (
-        (
-            current_hour >= working_hours["start"]["hour"]
-            and current_hour <= working_hours["end"]["hour"]
-        )
-        or (
-            current_hour == working_hours["start"]["hour"]
-            and current_minute >= working_hours["start"]["minute"]
-        )
-        or (
-            current_hour == working_hours["end"]["hour"]
-            and current_minute < working_hours["end"]["minute"]
-        )
+            (
+                working_hours["start"]["hour"] <= current_hour < working_hours["end"]["hour"]
+            ) or (
+                current_hour == working_hours["start"]["hour"]
+                and current_minute >= working_hours["start"]["minute"]
+            ) or (
+                current_hour == working_hours["end"]["hour"]
+                and current_minute < working_hours["end"]["minute"]
+            )
     ):
-        print("Время рабочее.")
-        work = "Время рабочее."
+        await message.reply("Сейчас рабочее время.\n\nВаш запрос будет рассмотрен в ближайшее время. 🕐📋")
     else:
-        print("Время не рабочее.")
-        work = "Время не рабочее."
-
-    answer = await get_chat_completion(message, work)
-    await message.reply(answer)
+        await message.reply("Текущее время является нерабочим.\n\nВаш запрос будет рассмотрен позже. Спасибо за понимание! 🕒📅")

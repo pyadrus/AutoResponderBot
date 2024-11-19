@@ -13,7 +13,7 @@ async def start():
     dp = Dispatcher()
 
     dp.startup.register(start_bot)  # Сообщение о старте бота.
-    dp.shutdown.register(stop_bot)  # Сообщение о остановке бота.
+    dp.shutdown.register(stop_bot)  # Сообщение об остановке бота.
 
     dp.business_message.register(handle_business_message)
 
