@@ -9,7 +9,7 @@ class Secrets(BaseSettings):
     giga_chat: str
 
     class Config:
-        env_file = ".env"
+        env_file = "settings/.env"
         env_file_encoding = "utf-8"
 
 
