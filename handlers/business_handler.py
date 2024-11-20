@@ -7,7 +7,7 @@ from loguru import logger
 
 def save_user_data_to_json(user_id, data):
     """Запись данных в json файл"""
-    file_path = f"{user_id}.json"
+    file_path = f"data/{user_id}.json"
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 

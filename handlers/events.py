@@ -1,4 +1,4 @@
-from settings import bot, secrets
+from system.dispatcher import bot, ADMIN_CHAT_ID
 
 
 def start_bot_message():
@@ -10,8 +10,8 @@ def stop_bot_message():
 
 
 async def start_bot():
-    await bot.send_message(secrets.admin_id, start_bot_message())
+    await bot.send_message(ADMIN_CHAT_ID, start_bot_message())
 
 
 async def stop_bot():
-    await bot.send_message(secrets.admin_id, stop_bot_message())
+    await bot.send_message(ADMIN_CHAT_ID, stop_bot_message())
