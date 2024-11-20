@@ -4,11 +4,13 @@ from aiogram.types import Message
 
 from loguru import logger
 
+
 def save_user_data_to_json(user_id, data):
     """Запись данных в json файл"""
     file_path = f"{user_id}.json"
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
 
 async def handle_business_message(message: Message):
     """
@@ -26,12 +28,12 @@ async def handle_business_message(message: Message):
     user_added_to_attachment_menu = message.from_user.added_to_attachment_menu
     user_can_join_groups = message.from_user.can_join_groups
     user_can_read_all_group_messages = message.from_user.can_read_all_group_messages
-    user_supports_inline_queries= message.from_user.supports_inline_queries
-    user_can_connect_to_business= message.from_user.can_connect_to_business
+    user_supports_inline_queries = message.from_user.supports_inline_queries
+    user_can_connect_to_business = message.from_user.can_connect_to_business
     user_has_main_web_app = message.from_user.has_main_web_app
 
-
-    logger.info(f"Пользователь ID: {user_id}. Username {user_username}, Фамилия: {user_last_name}, Имя: {user_first_name} написал сообщение.")
+    logger.info(
+        f"Пользователь ID: {user_id}. Username {user_username}, Фамилия: {user_last_name}, Имя: {user_first_name} написал сообщение.")
 
     user_data = {
         "user_id": user_id,
@@ -51,10 +53,12 @@ async def handle_business_message(message: Message):
 
     save_user_data_to_json(user_id, user_data)
 
+    logger.info(f"Данные пользователя: {user_data} записаны или обновлены")
+
     # Создаем словарь с рабочим временем
     working_hours = {
         "start": {"hour": 9, "minute": 0},  # Начало рабочего дня в 09:00
-        "end": {"hour": 18, "minute": 0},   # Окончание рабочего дня в 18:00
+        "end": {"hour": 18, "minute": 0},  # Окончание рабочего дня в 18:00
     }
 
     # Получаем текущее время
@@ -65,15 +69,16 @@ async def handle_business_message(message: Message):
     # Проверяем, находится ли текущее время внутри рабочего интервала
     if (
             (
-                working_hours["start"]["hour"] <= current_hour < working_hours["end"]["hour"]
+                    working_hours["start"]["hour"] <= current_hour < working_hours["end"]["hour"]
             ) or (
-                current_hour == working_hours["start"]["hour"]
-                and current_minute >= working_hours["start"]["minute"]
-            ) or (
-                current_hour == working_hours["end"]["hour"]
-                and current_minute < working_hours["end"]["minute"]
-            )
+            current_hour == working_hours["start"]["hour"]
+            and current_minute >= working_hours["start"]["minute"]
+    ) or (
+            current_hour == working_hours["end"]["hour"]
+            and current_minute < working_hours["end"]["minute"]
+    )
     ):
         await message.reply("Сейчас рабочее время.\n\nВаш запрос будет рассмотрен в ближайшее время. 🕐📋")
     else:
-        await message.reply("Текущее время является нерабочим.\n\nВаш запрос будет рассмотрен позже. Спасибо за понимание! 🕒📅")
+        await message.reply(
+            "Текущее время является нерабочим.\n\nВаш запрос будет рассмотрен позже. Спасибо за понимание! 🕒📅")

@@ -3,8 +3,8 @@ import asyncio
 from aiogram import Dispatcher
 from aiogram.methods import DeleteWebhook
 
-from business_handler import handle_business_message
-from events import start_bot, stop_bot
+from handlers.business_handler import handle_business_message
+from handlers.events import start_bot, stop_bot
 from settings import bot
 
 
