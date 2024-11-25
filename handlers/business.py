@@ -4,7 +4,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from utils.dispatcher import router
-from utils.file_utils import save_user_data_to_json
+from utils.file_utils import save_data_to_json
 
 
 @router.business_message()
@@ -35,8 +35,11 @@ async def handle_business_message(message: Message):
         logger.info(f"Пользователь ID: {user_id}. Username: {message.from_user.username}, "
                     f"Фамилия: {message.from_user.last_name}, Имя: {message.from_user.first_name} написал сообщение.")
 
+        file_path = f"data/{user_id}.json"
+
         # Сохраняем данные пользователя в JSON
-        save_user_data_to_json(user_id, user_data)
+        save_data_to_json(data=user_data, file_path=file_path)
+
         logger.info(f"Данные пользователя: {user_data} записаны или обновлены")
 
         # Открываем файл и читаем данные рабочего времени
@@ -64,7 +67,8 @@ async def handle_business_message(message: Message):
         if is_working_time:
             await message.reply("Сейчас рабочее время.\n\nВаш запрос будет рассмотрен в ближайшее время. 🕐📋")
         else:
-            await message.reply("Текущее время является нерабочим.\n\nВаш запрос будет рассмотрен позже. Спасибо за понимание! 🕒📅")
+            await message.reply(
+                "Текущее время является нерабочим.\n\nВаш запрос будет рассмотрен позже. Спасибо за понимание! 🕒📅")
     except Exception as e:
         logger.exception(f"Ошибка при обработке сообщения: {e}")
 

@@ -5,21 +5,22 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from loguru import logger
 
-from database.database import recording_user_data_of_the_launched_bot
+from db.database import recording_user_data_of_the_launched_bot
 from keyboards.inline import greeting_keyboard
 from states.groups import FormeditMainMenu
 from states.groups import SettingsClass
 from utils.dispatcher import bot, ADMIN_CHAT_ID
 from utils.dispatcher import router
 from utils.file_utils import load_bot_info
-from utils.file_utils import save_bot_info
-from utils.file_utils import save_to_json
+from utils.file_utils import save_data_to_json
+from utils.file_utils import save_data_to_json
 
 # ADMIN_CHAT_ID должен быть списком строк, а не чисел
 ADMIN_CHAT_ID = ["535185511"]
 
 # Путь к JSON файлу, где будут храниться рабочие часы
 WORKING_HOURS_FILE = 'messages/working_hours.json'
+
 
 @router.message(Command("start"))
 async def user_start_handler(message: Message) -> None:
@@ -94,7 +95,7 @@ async def update_info(message: Message, state: FSMContext):
     try:
         text = message.html_text
         bot_info = text
-        save_bot_info(bot_info, file_path='messages/main_menu.json')  # Сохраняем информацию в JSON
+        save_data_to_json(bot_info, file_path='messages/main_menu.json')  # Сохраняем информацию в JSON
         await message.reply("Информация обновлена.")
         await state.clear()
     except Exception as e:
@@ -177,14 +178,13 @@ async def set_end_minute(message: Message, state: FSMContext):
         }
 
         # Сохраняем словарь в JSON файл
-        save_to_json(working_hours, WORKING_HOURS_FILE)
+        save_data_to_json(working_hours, WORKING_HOURS_FILE)
 
         await message.reply("Информация о рабочем времени обновлена.")
         # Сбрасываем состояние после успешного сохранения
         await state.clear()
     except ValueError as e:
         await message.reply(f"Ошибка: {e}. Пожалуйста, введите минуты окончания снова.")
-
 
 
 def register_greeting_user_handler():
