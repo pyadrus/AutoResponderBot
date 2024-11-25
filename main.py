@@ -4,7 +4,6 @@ from aiogram.methods import DeleteWebhook
 from loguru import logger
 
 from handlers.business_handler import register_handle_business_message
-from handlers.events import start_bot, stop_bot
 
 from handlers.user_handlers import register_greeting_user_handler
 from system.dispatcher import bot, dp
@@ -16,14 +15,7 @@ async def main():
     """Старт бота"""
     try:
         register_greeting_user_handler()  # Главное меню бота
-
-        dp.startup.register(start_bot)  # Сообщение о старте бота.
-        dp.shutdown.register(stop_bot)  # Сообщение об остановке бота.
-
-        # dp.business_message.register(handle_business_message)
         register_handle_business_message()
-
-
 
         try:
             await bot(DeleteWebhook(drop_pending_updates=True))
