@@ -1,10 +1,10 @@
 {
     "start": {
-        "hour": "1",
-        "minute": 0
+        "hour": "09",
+        "minute": 30
     },
     "end": {
-        "hour": 5,
-        "minute": 3
+        "hour": 19,
+        "minute": 0
     }
 }

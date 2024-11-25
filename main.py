@@ -5,7 +5,7 @@ from loguru import logger
 
 from handlers.business_handler import register_handle_business_message
 from handlers.events import start_bot, stop_bot
-from handlers.setting_handlers import register_setting_handlers
+
 from handlers.user_handlers import register_greeting_user_handler
 from system.dispatcher import bot, dp
 
@@ -16,7 +16,6 @@ async def main():
     """Старт бота"""
     try:
         register_greeting_user_handler()  # Главное меню бота
-        register_setting_handlers()  # Изменение настроек
 
         dp.startup.register(start_bot)  # Сообщение о старте бота.
         dp.shutdown.register(stop_bot)  # Сообщение об остановке бота.
