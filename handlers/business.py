@@ -3,8 +3,8 @@ import json
 from aiogram.types import Message
 from loguru import logger
 
-from system.dispatcher import router
-from system.working_with_files import save_user_data_to_json
+from utils.dispatcher import router
+from utils.file_utils import save_user_data_to_json
 
 
 @router.business_message()

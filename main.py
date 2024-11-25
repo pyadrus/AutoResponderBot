@@ -3,12 +3,12 @@ import asyncio
 from aiogram.methods import DeleteWebhook
 from loguru import logger
 
-from handlers.business_handler import register_handle_business_message
+from handlers.business import register_handle_business_message
 
-from handlers.user_handlers import register_greeting_user_handler
-from system.dispatcher import bot, dp
+from handlers.user import register_greeting_user_handler
+from utils.dispatcher import bot, dp
 
-logger.add("logs/log.log")
+logger.add("logs/bot.log")
 
 
 async def main():

@@ -6,14 +6,14 @@ from aiogram.types import Message
 from loguru import logger
 
 from database.database import recording_user_data_of_the_launched_bot
-from keyboards.keyboards import greeting_keyboard
-from state_group.state_group import FormeditMainMenu
-from state_group.state_group import SettingsClass
-from system.dispatcher import bot, ADMIN_CHAT_ID
-from system.dispatcher import router
-from system.working_with_files import load_bot_info
-from system.working_with_files import save_bot_info
-from system.working_with_files import save_to_json
+from keyboards.inline import greeting_keyboard
+from states.groups import FormeditMainMenu
+from states.groups import SettingsClass
+from utils.dispatcher import bot, ADMIN_CHAT_ID
+from utils.dispatcher import router
+from utils.file_utils import load_bot_info
+from utils.file_utils import save_bot_info
+from utils.file_utils import save_to_json
 
 # ADMIN_CHAT_ID должен быть списком строк, а не чисел
 ADMIN_CHAT_ID = ["535185511"]
@@ -41,7 +41,7 @@ async def user_start_handler(message: Message) -> None:
         logger.info(f"{user_id} {user_name} {user_first_name} {user_last_name} {user_date}")
         recording_user_data_of_the_launched_bot(user_id, user_name, user_first_name, user_last_name, user_date)
         await bot.send_message(message.from_user.id,
-                               load_bot_info(messages="messages/main_menu_messages.json"),
+                               load_bot_info(messages="messages/main_menu.json"),
                                reply_markup=greeting_keyboard(),
                                parse_mode="HTML"
                                )
@@ -67,7 +67,7 @@ async def instructions_handlers(callback_query: types.CallbackQuery) -> None:
 
         logger.info(f"{user_id} {user_name} {user_first_name} {user_last_name}")
         await bot.send_message(callback_query.from_user.id,
-                               load_bot_info(messages="messages/main_menu_messages.json"),
+                               load_bot_info(messages="messages/main_menu.json"),
                                reply_markup=greeting_keyboard(),
                                parse_mode="HTML"
                                )
@@ -94,7 +94,7 @@ async def update_info(message: Message, state: FSMContext):
     try:
         text = message.html_text
         bot_info = text
-        save_bot_info(bot_info, file_path='messages/main_menu_messages.json')  # Сохраняем информацию в JSON
+        save_bot_info(bot_info, file_path='messages/main_menu.json')  # Сохраняем информацию в JSON
         await message.reply("Информация обновлена.")
         await state.clear()
     except Exception as e:

@@ -5,7 +5,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 from loguru import logger
 
-load_dotenv(dotenv_path='settings/.env')
+load_dotenv(dotenv_path='settings/config.env')
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 logger.info(BOT_TOKEN)
