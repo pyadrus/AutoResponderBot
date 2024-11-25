@@ -1,17 +1,13 @@
 from datetime import datetime
-import json
-from aiogram.types import Message
 
+from aiogram.types import Message
 from loguru import logger
 
-
-def save_user_data_to_json(user_id, data):
-    """Запись данных в json файл"""
-    file_path = f"data/{user_id}.json"
-    with open(file_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+from system.dispatcher import router
+from system.working_with_files import save_user_data_to_json
 
 
+@router.message()
 async def handle_business_message(message: Message):
     """
     Обрабатывает сообщение от пользователя. И проверяет рабочее время или нет. Если рабочее время, то бот отвечает пользователю,
@@ -84,3 +80,12 @@ async def handle_business_message(message: Message):
                 "Текущее время является нерабочим.\n\nВаш запрос будет рассмотрен позже. Спасибо за понимание! 🕒📅")
     except Exception as e:
         logger.exception(e)
+
+
+
+def register_handle_business_message():
+    router.business_message.register(handle_business_message)
+
+
+if __name__ == "__main__":
+    register_handle_business_message()

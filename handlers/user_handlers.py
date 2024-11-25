@@ -1,22 +1,22 @@
-from aiogram import types, F
 from aiogram.filters import Command
-from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import StatesGroup, State
+from aiogram import F
 from aiogram.types import Message
 from loguru import logger
-
+from aiogram import types
 from database.database import recording_user_data_of_the_launched_bot
 from keyboards.keyboards import greeting_keyboard
+from state_group.state_group import FormeditMainMenu
+
 from system.dispatcher import bot, dp, ADMIN_CHAT_ID
 from system.dispatcher import router
 from system.working_with_files import load_bot_info
 from system.working_with_files import save_bot_info
 
 
-@dp.message(CommandStart())
+@router.message(Command("start"))
 async def user_start_handler(message: Message) -> None:
-    """"Обработчик команды /start. Главное меню бота"""
+    """Обработчик команды /start. Главное меню бота"""
     try:
         user_id = message.from_user.id
 
@@ -68,10 +68,6 @@ async def instructions_handlers(callback_query: types.CallbackQuery) -> None:
         logger.error(f"Ошибка: {e}")
 
 
-class FormeditMainMenu(StatesGroup):
-    text_edit_main_menu = State()
-
-
 @router.message(Command("edit_main_menu"))
 async def edit_main_menu(message: Message, state: FSMContext):
     """Обработчик команды /edit_main_menu (только для админа) Изменяет текст в главном меню бота"""
@@ -103,3 +99,8 @@ def register_greeting_user_handler():
     dp.message.register(user_start_handler)
     dp.message.register(instructions_handlers)  # обработчик для кнопки "Назад"
     dp.message.register(edit_main_menu)  # обработчик для кнопки "Назад"
+    dp.message.register(update_info)
+
+
+if __name__ == "__main__":
+    register_greeting_user_handler()
