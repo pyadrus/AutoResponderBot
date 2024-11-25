@@ -10,3 +10,4 @@ gigachat
 langchain-core
 python-dotenv
 peewee
+langchain-gigachat

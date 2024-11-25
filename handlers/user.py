@@ -1,5 +1,4 @@
-from aiogram import F
-from aiogram import types
+from aiogram import F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
@@ -7,13 +6,9 @@ from loguru import logger
 
 from db.database import recording_user_data_of_the_launched_bot
 from keyboards.inline import greeting_keyboard
-from states.groups import FormeditMainMenu
-from states.groups import SettingsClass
-from utils.dispatcher import bot, ADMIN_CHAT_ID
-from utils.dispatcher import router
-from utils.file_utils import load_bot_info
-from utils.file_utils import save_data_to_json
-from utils.file_utils import save_data_to_json
+from states.groups import FormeditMainMenu, SettingsClass
+from utils.dispatcher import bot, ADMIN_CHAT_ID, router
+from utils.file_utils import load_bot_info, save_data_to_json
 
 # ADMIN_CHAT_ID должен быть списком строк, а не чисел
 ADMIN_CHAT_ID = ["535185511"]
@@ -187,19 +182,45 @@ async def set_end_minute(message: Message, state: FSMContext):
         await message.reply(f"Ошибка: {e}. Пожалуйста, введите минуты окончания снова.")
 
 
+
+@router.callback_query(F.data == "about_the_author")
+async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None:
+    """Об авторе"""
+    try:
+        user_id = callback_query.from_user.id
+
+        user_name = callback_query.from_user.username
+        if callback_query.from_user.username is None:
+            user_name = ''  # Установим пустую строку вместо None
+
+        user_first_name = callback_query.from_user.first_name
+        user_last_name = callback_query.from_user.last_name
+        logger.info(f"Пользователь запросил раздел от авторе: {user_id} {user_name} {user_first_name} {user_last_name}")
+        await bot.send_message(
+            callback_query.from_user.id,
+                               load_bot_info(messages="messages/about_author.json"),
+                               # reply_markup=check_the_warranty_card_keyboard(),
+                               disable_web_page_preview=True,
+                               parse_mode="HTML"
+                               )
+    except Exception as e:
+        logger.error(f"Ошибка: {e}")
+
+
 def register_greeting_user_handler():
     """Регистрация обработчиков для бота"""
+
     router.message.register(user_start_handler)
     router.message.register(instructions_handlers)  # обработчик для кнопки "Назад"
     router.message.register(edit_main_menu)  # обработчик для кнопки "Назад"
     router.message.register(update_info)
-
     router.message.register(start_setting_hours)
     router.message.register(set_start_hour)
     router.message.register(set_start_minute)
     router.message.register(set_end_hour)
     router.message.register(set_end_minute)
 
+    router.message.register(about_the_author_handlers) # Об авторе
 
 if __name__ == "__main__":
     register_greeting_user_handler()
