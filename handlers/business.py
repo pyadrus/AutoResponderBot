@@ -1,5 +1,6 @@
-from datetime import datetime
 import json
+from datetime import datetime
+
 from aiogram.types import Message
 from loguru import logger
 
@@ -9,6 +10,7 @@ from utils.file_utils import save_data_to_json
 # Глобальные словари для хранения состояния пользователей
 notified_users = {}
 answered_users = {}
+
 
 @router.business_message()
 async def handle_business_message(message: Message):
@@ -45,6 +47,26 @@ async def handle_business_message(message: Message):
         save_data_to_json(data=user_data, file_path=file_path)
 
         logger.info(f"Данные пользователя: {user_data} записаны или обновлены")
+
+        # Проверка на наличие слова "ошибка" в сообщении
+        if "ошибка" in message.text.lower():
+            await message.reply(
+                "📄 Пожалуйста, отправьте лог-файл моему помощнику: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n\n"
+                "✨ Это поможет быстро разобраться с проблемой. Обратите внимание, что log файлы отправленные в личку не просматриваются. Спасибо за сотрудничество! 🌟",
+                parse_mode="Markdown"
+            )
+            return
+
+        # Проверка на наличие слова "пароля" в сообщении
+        if "пароля" in message.text.lower():
+            await message.reply(
+                "Для получения пароля, пожалуйста, посетите моего помощника: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n"
+                "🔑 Чтобы получить пароль, необходимо подписаться на канал:\n"
+                "[📲 Перейти к каналу](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
+                "Спасибо за ваше сотрудничество! 🌟",
+                parse_mode="Markdown"
+            )
+            return
 
         # Проверка на наличие слова "пароль" в сообщении
         if "пароль" in message.text.lower():
@@ -92,7 +114,7 @@ async def handle_business_message(message: Message):
                     "приглашаю вас заглянуть на мой канал: "
                     "[📲 Откройте канал](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
                     "Спасибо за ваше терпение! 😊"
-                , parse_mode="Markdown")
+                    , parse_mode="Markdown")
                 # Сохраняем состояние пользователя, чтобы не отвечать повторно
                 answered_users[user_id] = True
         else:
@@ -104,7 +126,7 @@ async def handle_business_message(message: Message):
                     "Пока я не могу ответить, но вы можете ознакомиться с моим каналом: "
                     "[📲 Посетите канал](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
                     "Спасибо за ваше понимание и терпение! 🌟"
-                , parse_mode="Markdown")
+                    , parse_mode="Markdown")
                 # Сохраняем состояние пользователя для нерабочего времени
                 notified_users[user_id] = True
 
@@ -114,8 +136,10 @@ async def handle_business_message(message: Message):
     except Exception as e:
         logger.exception(f"Ошибка при обработке сообщения: {e}")
 
+
 def register_handle_business_message():
     router.business_message.register(handle_business_message)
+
 
 if __name__ == "__main__":
     register_handle_business_message()
