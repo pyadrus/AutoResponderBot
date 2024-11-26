@@ -2,7 +2,7 @@ from peewee import *
 from loguru import logger
 
 # Модель для таблицы в базе данных
-db = SqliteDatabase('database.db')
+db = SqliteDatabase('db/database.db')
 
 
 class UserStart(Model):

@@ -13,7 +13,7 @@ answered_users = {}
 
 
 # Настройка подключения к базе данных SQLite (или другой базы данных)
-db = SqliteDatabase('messages.db')
+db = SqliteDatabase('db/database.db')
 
 # Модель для хранения сообщений пользователей
 class UserMessage(Model):
