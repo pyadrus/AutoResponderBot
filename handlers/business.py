@@ -5,13 +5,12 @@ from aiogram.types import Message
 from loguru import logger
 
 from db.database import create_user_table
-from utils.dispatcher import router
+from utils.dispatcher import router, ADMIN_CHAT_ID
 from utils.file_utils import save_data_to_json
 
 # Глобальные словари для хранения состояния пользователей
 notified_users = {}
 answered_users = {}
-
 
 # Пример использования
 def save_user_message(user_id: int, message_text: str):
@@ -70,21 +69,22 @@ async def handle_business_message(message: Message):
 
         save_user_message(user_id, message_text)
 
+        error_list = ["ошибка", "ошибки"]
+        pass_list = ["пароля", "пароль"]
+
         try:
-            # Проверка на наличие слова "ошибка" в сообщении
-            if "ошибка" in message.text.lower():
+            # message_text = message.text.lower()
+            user_id = message.from_user.id
+            # Проверка на слова из списка ошибок
+            if any(word in message_text for word in error_list) and user_id != int(ADMIN_CHAT_ID):
                 await message.reply(
                     "📄 Пожалуйста, отправьте лог-файл моему помощнику: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n\n"
                     "✨ Это поможет быстро разобраться с проблемой. Обратите внимание, что log файлы отправленные в личку не просматриваются. Спасибо за сотрудничество! 🌟",
                     parse_mode="Markdown"
                 )
                 return
-        except AttributeError:
-            pass
-
-        try:
-            # Проверка на наличие слова "пароля" в сообщении
-            if "пароля" in message.text.lower():
+            # Проверка на слова, связанные с паролем
+            if any(word in message_text for word in pass_list) and user_id != int(ADMIN_CHAT_ID):
                 await message.reply(
                     "Для получения пароля, пожалуйста, посетите моего помощника: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n"
                     "🔑 Чтобы получить пароль, необходимо подписаться на канал:\n"
@@ -92,23 +92,9 @@ async def handle_business_message(message: Message):
                     "Спасибо за ваше сотрудничество! 🌟",
                     parse_mode="Markdown"
                 )
-                return
         except AttributeError:
             pass
 
-        try:
-            # Проверка на наличие слова "пароль" в сообщении
-            if "пароль" in message.text.lower():
-                await message.reply(
-                    "Для получения пароля, пожалуйста, посетите моего помощника: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n"
-                    "🔑 Чтобы получить пароль, необходимо подписаться на канал:\n"
-                    "[📲 Перейти к каналу](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
-                    "Спасибо за ваше сотрудничество! 🌟",
-                    parse_mode="Markdown"
-                )
-                return
-        except AttributeError:
-            pass
 
         # Открываем файл и читаем данные рабочего времени
         with open('messages/working_hours.json', 'r') as file:
