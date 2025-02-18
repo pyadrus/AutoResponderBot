@@ -4,13 +4,13 @@ from datetime import datetime
 from aiogram.types import Message
 from loguru import logger
 
-from db.database import create_user_table
+from db.database import create_user_table, recording_data_users_who_wrote_personal_account
 from utils.dispatcher import router, ADMIN_CHAT_ID
-from utils.file_utils import save_data_to_json
 
 # Глобальные словари для хранения состояния пользователей
 notified_users = {}
 answered_users = {}
+
 
 # Пример использования
 def save_user_message(user_id: int, message_text: str):
@@ -36,9 +36,7 @@ async def handle_business_message(message: Message):
     Также отвечает на запросы, связанные с паролем.
     """
     try:
-
         message_text = message.text
-
         user_id = message.from_user.id
         user_data = {
             "user_id": user_id,
@@ -55,18 +53,7 @@ async def handle_business_message(message: Message):
             "user_can_connect_to_business": message.from_user.can_connect_to_business,
             "user_has_main_web_app": message.from_user.has_main_web_app
         }
-
-        # Логируем данные пользователя
-        logger.info(f"Пользователь ID: {user_id}. Username: {message.from_user.username}, "
-                    f"Фамилия: {message.from_user.last_name}, Имя: {message.from_user.first_name} написал сообщение.")
-
-        file_path = f"data/{user_id}.json"
-
-        # Сохраняем данные пользователя в JSON
-        save_data_to_json(data=user_data, file_path=file_path)
-
-        logger.info(f"Данные пользователя: {user_data} записаны или обновлены")
-
+        recording_data_users_who_wrote_personal_account(**user_data)
         save_user_message(user_id, message_text)
 
         error_list = ["ошибка", "ошибки", "ошибочки"]
@@ -93,7 +80,6 @@ async def handle_business_message(message: Message):
                 )
         except AttributeError:
             pass
-
 
         # Открываем файл и читаем данные рабочего времени
         with open('messages/working_hours.json', 'r') as file:
