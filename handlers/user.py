@@ -182,7 +182,6 @@ async def set_end_minute(message: Message, state: FSMContext):
         await message.reply(f"Ошибка: {e}. Пожалуйста, введите минуты окончания снова.")
 
 
-
 @router.callback_query(F.data == "about_the_author")
 async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None:
     """Об авторе"""
@@ -198,11 +197,11 @@ async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None
         logger.info(f"Пользователь запросил раздел от авторе: {user_id} {user_name} {user_first_name} {user_last_name}")
         await bot.send_message(
             callback_query.from_user.id,
-                               load_bot_info(messages="messages/about_author.json"),
-                               # reply_markup=check_the_warranty_card_keyboard(),
-                               disable_web_page_preview=True,
-                               parse_mode="HTML"
-                               )
+            load_bot_info(messages="messages/about_author.json"),
+            # reply_markup=check_the_warranty_card_keyboard(),
+            disable_web_page_preview=True,
+            parse_mode="HTML"
+        )
     except Exception as e:
         logger.error(f"Ошибка: {e}")
 
@@ -220,7 +219,8 @@ def register_greeting_user_handler():
     router.message.register(set_end_hour)
     router.message.register(set_end_minute)
 
-    router.message.register(about_the_author_handlers) # Об авторе
+    router.message.register(about_the_author_handlers)  # Об авторе
+
 
 if __name__ == "__main__":
     register_greeting_user_handler()

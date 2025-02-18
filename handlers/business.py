@@ -1,9 +1,10 @@
 import json
 from datetime import datetime
-from peewee import *
+
 from aiogram.types import Message
 from loguru import logger
 
+from db.database import create_user_table
 from utils.dispatcher import router
 from utils.file_utils import save_data_to_json
 
@@ -11,41 +12,6 @@ from utils.file_utils import save_data_to_json
 notified_users = {}
 answered_users = {}
 
-
-# Настройка подключения к базе данных SQLite (или другой базы данных)
-db = SqliteDatabase('db/database.db')
-
-# Модель для хранения сообщений пользователей
-class UserMessage(Model):
-    user_id = IntegerField()
-    message_text = TextField()
-    timestamp = DateTimeField(default=datetime.now)
-
-    class Meta:
-        database = db  # Определяем базу данных, с которой будет работать модель
-
-# Функция для создания таблицы для конкретного пользователя
-def create_user_table(user_id: int):
-    """
-    Создает таблицу с именем пользователя (user_id), если она не существует.
-    """
-    # Динамическое создание таблицы для каждого пользователя
-
-    class UserMessageTable(Model):
-
-
-        user_id = IntegerField()
-        message_text = TextField()
-        timestamp = DateTimeField(default=datetime.now)
-
-        class Meta:
-            database = db
-            table_name = f"user_{user_id}"
-
-    # Создаем таблицу
-    db.create_tables([UserMessageTable], safe=True)
-
-    return UserMessageTable
 
 # Пример использования
 def save_user_message(user_id: int, message_text: str):
@@ -61,6 +27,7 @@ def save_user_message(user_id: int, message_text: str):
         print(f"Сообщение от пользователя {user_id} сохранено в таблице {UserMessageTable._meta.table_name}.")
     except Exception as e:
         print(f"Ошибка при сохранении сообщения: {e}")
+
 
 @router.business_message()
 async def handle_business_message(message: Message):
