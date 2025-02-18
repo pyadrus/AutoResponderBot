@@ -32,25 +32,25 @@ pip install -r requirements.txt
 
 1. Создайте файл `config.env` в папке `settings` и добавьте ваши переменные окружения:
 
-```env
-Копировать код
-BOT_TOKEN=ВашТокенБота
-```
+    ```env
+    Копировать код
+    BOT_TOKEN=ВашТокенБота
+    ```
 
 2. Отредактируйте рабочие часы в файле `messages/working_hours.json`:
-```json
-
-{
-    "start": {
-        "hour": "9",
-        "minute": "0"
-    },
-    "end": {
-        "hour": "18",
-        "minute": "0"
+    ```json
+    
+    {
+        "start": {
+            "hour": "9",
+            "minute": "0"
+        },
+        "end": {
+            "hour": "18",
+            "minute": "0"
+        }
     }
-}
-```
+    ```
 Убедитесь, что все необходимые файлы находятся в папке data.
 
 ## 3. Запуск
