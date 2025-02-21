@@ -13,16 +13,22 @@ answered_users = {}
 
 
 # Пример использования
-def save_user_message(user_id: int, message_text: str):
+def save_user_message(business_id, user_id, user_first_name, user_last_name, user_username, message_text):
     """
     Сохраняет сообщение в таблице пользователя.
     """
     try:
         # Создаем или получаем таблицу для конкретного пользователя
-        UserMessageTable = create_user_table(user_id)
-
+        UserMessageTable = create_user_table(business_id)
+        if not UserMessageTable:
+            user_first_name = ''
+        if not user_last_name:
+            user_last_name = ''
+        if not user_username:
+            user_username = ''
         # Сохраняем сообщение в таблице
-        UserMessageTable.create(user_id=user_id, message_text=message_text)
+        UserMessageTable.create(business_id=business_id, user_id=user_id, user_first_name=user_first_name,
+                                user_last_name=user_last_name, user_username=user_username, message_text=message_text)
         print(f"Сообщение от пользователя {user_id} сохранено в таблице {UserMessageTable._meta.table_name}.")
     except Exception as e:
         print(f"Ошибка при сохранении сообщения: {e}")
@@ -36,6 +42,8 @@ async def handle_business_message(message: Message):
     Также отвечает на запросы, связанные с паролем.
     """
     try:
+        message_text_business_connection = message.business_connection_id
+
         message_text = message.text
         user_id = message.from_user.id
         user_data = {
@@ -54,7 +62,12 @@ async def handle_business_message(message: Message):
             "user_has_main_web_app": message.from_user.has_main_web_app
         }
         recording_data_users_who_wrote_personal_account(**user_data)
-        save_user_message(user_id, message_text)
+        if user_id != int(ADMIN_CHAT_ID):
+            save_user_message(message_text_business_connection, user_id,  message.from_user.first_name,
+                              message.from_user.last_name, message.from_user.username,  f"Сообщение от пользователя: {message_text}")
+        else:
+            save_user_message(message_text_business_connection, user_id,  message.from_user.first_name,
+                              message.from_user.last_name, message.from_user.username, f"Сообщение от администратора: {message_text}")
 
         error_list = ["ошибка", "ошибки", "ошибочки"]
         pass_list = ["пароля", "пароль"]

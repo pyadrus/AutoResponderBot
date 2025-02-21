@@ -40,7 +40,11 @@ def create_user_table(user_id: int):
     # Динамическое создание таблицы для каждого пользователя
 
     class UserMessageTable(Model):
+        business_id = CharField()  # Идентификатор бизнеса
         user_id = IntegerField()
+        user_first_name = CharField()  # Имя пользователя
+        user_last_name = CharField()  # Фамилия пользователя
+        user_username = CharField()  # Username пользователя
         message_text = TextField()
         timestamp = DateTimeField(default=datetime.now)
 
