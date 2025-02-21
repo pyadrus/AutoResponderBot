@@ -4,6 +4,7 @@ from aiogram.methods import DeleteWebhook
 from loguru import logger
 
 from handlers.business import register_handle_business_message
+from handlers.getting_customer_base import register_getting_customer_base_handler
 
 from handlers.user import register_greeting_user_handler
 from utils.dispatcher import bot, dp
@@ -17,6 +18,7 @@ async def main():
         register_greeting_user_handler()  # Главное меню бота
         register_handle_business_message()
 
+        register_getting_customer_base_handler()  # Получение клиентской базы
         try:
             await bot(DeleteWebhook(drop_pending_updates=True))
             await dp.start_polling(bot)

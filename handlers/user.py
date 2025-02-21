@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from db.database import recording_user_data_of_the_launched_bot
-from keyboards.inline import greeting_keyboard
+from keyboards.inline import greeting_keyboard, back_to_menu
 from states.groups import FormeditMainMenu, SettingsClass
 from utils.dispatcher import bot, ADMIN_CHAT_ID, router
 from utils.file_utils import load_bot_info, save_data_to_json
@@ -198,7 +198,7 @@ async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None
         await bot.send_message(
             callback_query.from_user.id,
             load_bot_info(messages="messages/about_author.json"),
-            # reply_markup=check_the_warranty_card_keyboard(),
+            reply_markup=back_to_menu(),
             disable_web_page_preview=True,
             parse_mode="HTML"
         )
