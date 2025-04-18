@@ -4,7 +4,7 @@ from datetime import datetime
 from aiogram.types import Message
 from loguru import logger
 
-from ai.ai_utils import get_chat_completion
+from ai.ai_utils import get_chat_completion, load_knowledge_base
 from db.database import create_user_table, recording_data_users_who_wrote_personal_account
 from utils.dispatcher import router, ADMIN_CHAT_ID
 
@@ -71,6 +71,10 @@ async def handle_business_message(message: Message):
             save_user_message(message_text_business_connection, user_id, message.from_user.first_name,
                               message.from_user.last_name, message.from_user.username,
                               f"Сообщение от администратора: {message_text}")
+
+        # Загружаем базу знаний при запуске
+        knowledge_base_content = load_knowledge_base()
+
 
         system_prompt = "Ты - бот, который отвечает на вопросы пользователей."
         ai_response = await get_chat_completion(message, system_prompt)

@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import os
+
 from aiogram.types import Message
 from gigachat import GigaChat
 from groq import Groq
@@ -37,6 +40,19 @@ async def get_chat_completion_gigachat(message: Message, work):
     except Exception as e:
         logger.exception(e)
 
+user_dialogs = {}  # Словарь для хранения истории диалогов
+
+# Путь к файлу базы знаний
+KNOWLEDGE_BASE_PATH = "knowledge_base/data.txt"
+
+# Чтение базы знаний
+def load_knowledge_base():
+    """Загружает содержимое файла базы знаний."""
+    if os.path.exists(KNOWLEDGE_BASE_PATH):
+        with open(KNOWLEDGE_BASE_PATH, "r", encoding="utf-8") as file:
+            return file.read()
+    else:
+        return "База знаний не найдена. Пожалуйста, создайте файл knowledge_base/data.txt."
 
 async def get_chat_completion(message, system_prompt):
     """Возвращает ответ пользователя"""
