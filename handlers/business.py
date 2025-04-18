@@ -4,6 +4,7 @@ from datetime import datetime
 from aiogram.types import Message
 from loguru import logger
 
+from ai.ai_utils import get_chat_completion
 from db.database import create_user_table, recording_data_users_who_wrote_personal_account
 from utils.dispatcher import router, ADMIN_CHAT_ID
 
@@ -71,30 +72,9 @@ async def handle_business_message(message: Message):
                               message.from_user.last_name, message.from_user.username,
                               f"Сообщение от администратора: {message_text}")
 
-        error_list = ["ошибка", "ошибки", "ошибочки"]
-        pass_list = ["пароля", "пароль"]
-
-        try:
-            user_id = message.from_user.id
-            # Проверка на слова из списка ошибок
-            if any(word in message_text for word in error_list) and user_id != int(ADMIN_CHAT_ID):
-                await message.reply(
-                    "📄 Пожалуйста, отправьте лог-файл моему помощнику: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n\n"
-                    "✨ Это поможет быстро разобраться с проблемой. Обратите внимание, что log файлы отправленные в личку не просматриваются. Спасибо за сотрудничество! 🌟",
-                    parse_mode="Markdown"
-                )
-                return
-            # Проверка на слова, связанные с паролем
-            if any(word in message_text for word in pass_list) and user_id != int(ADMIN_CHAT_ID):
-                await message.reply(
-                    "Для получения пароля, пожалуйста, посетите моего помощника: [@h24service_bot](https://t.me/h24service_bot) 🤖.\n"
-                    "🔑 Чтобы получить пароль, необходимо подписаться на канал:\n"
-                    "[📲 Перейти к каналу](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
-                    "Спасибо за ваше сотрудничество! 🌟",
-                    parse_mode="Markdown"
-                )
-        except AttributeError:
-            pass
+        system_prompt = "Ты - бот, который отвечает на вопросы пользователей."
+        ai_response = await get_chat_completion(message, system_prompt)
+        await message.reply(f"{ai_response}")
 
         # Открываем файл и читаем данные рабочего времени
         with open('messages/working_hours.json', 'r') as file:
@@ -128,10 +108,7 @@ async def handle_business_message(message: Message):
                 if message.from_user.id not in [int(ADMIN_CHAT_ID)]:
                     await message.reply(
                         "✅ **Сейчас рабочее время!**\n\n"
-                        "🕐 Ваш запрос будет рассмотрен в ближайшее время. Пока я обрабатываю ваш вопрос, "
-                        "приглашаю вас заглянуть на мой канал: "
-                        "[📲 Откройте канал](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
-                        "Спасибо за ваше терпение! 😊"
+                        "Здравствуйте!"
                         , parse_mode="Markdown")
                     # Сохраняем состояние пользователя, чтобы не отвечать повторно
                     answered_users[user_id] = True
@@ -141,10 +118,7 @@ async def handle_business_message(message: Message):
                 if message.from_user.id not in [int(ADMIN_CHAT_ID)]:
                     await message.reply(
                         "❌ **Сейчас нерабочее время!**\n\n"
-                        "🌙 Пожалуйста, подождите до начала рабочего времени, и ваш запрос будет обработан. "
-                        "Пока я не могу ответить, но вы можете ознакомиться с моим каналом: "
-                        "[📲 Посетите канал](https://t.me/+uE6L_wey4c43YWEy) 📬.\n\n"
-                        "Спасибо за ваше понимание и терпение! 🌟"
+                        "Здравствуйте!\n"
                         , parse_mode="Markdown")
                     # Сохраняем состояние пользователя для нерабочего времени
                     notified_users[user_id] = True

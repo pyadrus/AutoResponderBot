@@ -5,6 +5,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_gigachat.chat_models import GigaChat
 from loguru import logger
 
+from proxy_config import setup_proxy
 from utils.dispatcher import GIGA_CHAT, GROQ_KEY
 
 
@@ -37,17 +38,18 @@ async def get_chat_completion_gigachat(message: Message, work):
         logger.exception(e)
 
 
-async def get_chat_completion(message: Message, work):
+async def get_chat_completion(message, system_prompt):
     """Возвращает ответ пользователя"""
     try:
+        setup_proxy()  # Установка прокси
         client = Groq(api_key=GROQ_KEY)
 
         chat_completion = client.chat.completions.create(
             messages=[
-                {"role": "system", "content": system_prompt(work)},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": message.text},
             ],
-            model="llama3-groq-70b-8192-tool-use-preview",
+            model="gemma2-9b-it",
         )
 
         return chat_completion.choices[0].message.content
