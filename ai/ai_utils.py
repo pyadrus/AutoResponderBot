@@ -3,9 +3,9 @@ from gigachat import GigaChat
 from groq import Groq
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_gigachat.chat_models import GigaChat
+from loguru import logger
 
 from utils.dispatcher import GIGA_CHAT, GROQ_KEY
-from loguru import logger
 
 
 def system_prompt(work):

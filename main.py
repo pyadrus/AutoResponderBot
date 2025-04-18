@@ -5,7 +5,6 @@ from loguru import logger
 
 from handlers.business import register_handle_business_message
 from handlers.getting_customer_base import register_getting_customer_base_handler
-
 from handlers.user import register_greeting_user_handler
 from utils.dispatcher import bot, dp
 

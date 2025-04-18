@@ -1,6 +1,7 @@
 import json
-from loguru import logger
 import os
+
+from loguru import logger
 
 
 def save_data_to_json(data, file_path):

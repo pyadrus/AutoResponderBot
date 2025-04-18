@@ -7,7 +7,7 @@ def greeting_keyboard():
     try:
         rows = [
             [InlineKeyboardButton(text='🕒 Изменить время работы', callback_data='change_opening_hours'), ],
-            [InlineKeyboardButton(text='Получение клиентской базы', callback_data='getting_customer_base'),],
+            [InlineKeyboardButton(text='Получение клиентской базы', callback_data='getting_customer_base'), ],
             [InlineKeyboardButton(text='👨‍💻 Об авторе', callback_data='about_the_author'),
              InlineKeyboardButton(text='❓ Помощь', callback_data='help')],
         ]
@@ -15,6 +15,7 @@ def greeting_keyboard():
         return greeting_keyboards
     except Exception as e:
         logger.error(f"Ошибка: {e}")
+
 
 def back_to_menu():
     try:
@@ -25,6 +26,7 @@ def back_to_menu():
         return back_to_menu
     except Exception as e:
         logger.error(f"Ошибка: {e}")
+
 
 if __name__ == '__main__':
     greeting_keyboard()
