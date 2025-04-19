@@ -10,7 +10,7 @@ from keyboards.inline import greeting_keyboard, back_to_menu
 from messages.messages import data
 from states.groups import FormeditMainMenu, SettingsClass
 from utils.dispatcher import bot, ADMIN_CHAT_ID, router
-from utils.file_utils import load_bot_info, save_data_to_json
+from utils.file_utils import save_data_to_json
 
 # ADMIN_CHAT_ID должен быть списком строк, а не чисел
 ADMIN_CHAT_ID = ["535185511"]
@@ -35,7 +35,7 @@ async def user_start_handler(message: Message) -> None:
         recording_user_data_of_the_launched_bot(message.from_user.id, user_name, user_first_name, user_last_name,
                                                 user_date)
         await bot.send_message(message.from_user.id,
-                               load_bot_info(messages="messages/main_menu.json"),
+                               data['menu']['text'],
                                reply_markup=greeting_keyboard(),
                                parse_mode="HTML"
                                )

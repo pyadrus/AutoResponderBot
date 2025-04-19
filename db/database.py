@@ -27,13 +27,13 @@ class UserWrotePersonalAccount(Model):
         table_name = "user_wrote_personal_account"
 
 # Модель для хранения сообщений пользователей
-class UserMessage(Model):
-    user_id = IntegerField()
-    message_text = TextField()
-    timestamp = DateTimeField(default=datetime.now)
-
-    class Meta:
-        database = db  # Определяем базу данных, с которой будет работать модель
+# class UserMessage(Model):
+#     user_id = IntegerField()
+#     message_text = TextField()
+#     timestamp = DateTimeField(default=datetime.now)
+#
+#     class Meta:
+#         database = db  # Определяем базу данных, с которой будет работать модель
 
 
 class UserStart(Model):
