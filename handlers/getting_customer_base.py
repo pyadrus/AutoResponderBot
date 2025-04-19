@@ -6,31 +6,10 @@ from aiogram import types
 from aiogram.types import FSInputFile
 from loguru import logger
 from openpyxl.workbook import Workbook
-from peewee import Model, CharField
 
-from db.database import db
+from db.database import UserWrotePersonalAccount
 from keyboards.inline import back_to_menu
 from utils.dispatcher import bot, router
-
-
-class UserWrotePersonalAccount(Model):
-    user_id = CharField()
-    user_bot = CharField()
-    user_first_name = CharField()
-    user_last_name = CharField()
-    user_username = CharField()
-    user_language_code = CharField()
-    user_is_premium = CharField()
-    user_added_to_attachment_menu = CharField()
-    user_can_join_groups = CharField()
-    user_can_read_all_group_messages = CharField()
-    user_supports_inline_queries = CharField()
-    user_can_connect_to_business = CharField()
-    user_has_main_web_app = CharField()
-
-    class Meta:
-        database = db
-        table_name = "user_wrote_personal_account"
 
 
 def export_to_excel():
@@ -76,16 +55,10 @@ def export_to_excel():
 async def getting_customer_base_handler(callback_query: types.CallbackQuery) -> None:
     """Получение клиентской базы"""
     try:
-
-        file_path = export_to_excel()
-        file = FSInputFile(file_path)
-        text = (
-            "Ваша клиентская база"
-        )
-        await bot.send_document(callback_query.from_user.id, document=file, caption=text, reply_markup=back_to_menu(),
+        await bot.send_document(callback_query.from_user.id, document=FSInputFile(export_to_excel()),
+                                caption="Ваша клиентская база", reply_markup=back_to_menu(),
                                 parse_mode="HTML")  # Отправка файла пользователю
-        os.remove(file_path)  # Удаление файла
-
+        os.remove(export_to_excel())  # Удаление файла
     except Exception as e:
         logger.error(f"Ошибка: {e}")
 

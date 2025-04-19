@@ -7,6 +7,24 @@ from peewee import *
 # Настройка подключения к базе данных SQLite (или другой базы данных)
 db = SqliteDatabase('db/database.db')
 
+class UserWrotePersonalAccount(Model):
+    user_id = CharField()
+    user_bot = CharField()
+    user_first_name = CharField()
+    user_last_name = CharField()
+    user_username = CharField()
+    user_language_code = CharField()
+    user_is_premium = CharField()
+    user_added_to_attachment_menu = CharField()
+    user_can_join_groups = CharField()
+    user_can_read_all_group_messages = CharField()
+    user_supports_inline_queries = CharField()
+    user_can_connect_to_business = CharField()
+    user_has_main_web_app = CharField()
+
+    class Meta:
+        database = db
+        table_name = "user_wrote_personal_account"
 
 # Модель для хранения сообщений пользователей
 class UserMessage(Model):

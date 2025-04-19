@@ -162,15 +162,11 @@ async def set_end_minute(message: Message, state: FSMContext):
 
         # Получаем ранее сохраненные данные
         data = await state.get_data()
-        start_hour = data.get("setting_start_hour")
-        start_minute = data.get("setting_start_minute")
-        end_hour = data.get("setting_end_hour")
-        end_minute = data.get("setting_end_minute")
 
         # Создаем словарь с рабочим временем
         working_hours = {
-            "start": {"hour": start_hour, "minute": start_minute},
-            "end": {"hour": end_hour, "minute": end_minute},
+            "start": {"hour": data.get("setting_start_hour"), "minute": data.get("setting_start_minute")},
+            "end": {"hour": data.get("setting_end_hour"), "minute": data.get("setting_end_minute")},
         }
 
         # Сохраняем словарь в JSON файл
@@ -187,15 +183,12 @@ async def set_end_minute(message: Message, state: FSMContext):
 async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None:
     """Об авторе"""
     try:
-        user_id = callback_query.from_user.id
-
         user_name = callback_query.from_user.username
         if callback_query.from_user.username is None:
             user_name = ''  # Установим пустую строку вместо None
 
-        user_first_name = callback_query.from_user.first_name
-        user_last_name = callback_query.from_user.last_name
-        logger.info(f"Пользователь запросил раздел от авторе: {user_id} {user_name} {user_first_name} {user_last_name}")
+        logger.info(
+            f"Пользователь запросил раздел от авторе: {callback_query.from_user.id} {user_name} {callback_query.from_user.first_name} {callback_query.from_user.last_name}")
         await bot.send_message(
             callback_query.from_user.id,
             load_bot_info(messages="messages/about_author.json"),
