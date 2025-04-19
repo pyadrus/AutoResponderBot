@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from aiogram import F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext

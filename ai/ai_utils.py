@@ -4,8 +4,7 @@ import os
 from aiogram.types import Message
 from gigachat import GigaChat
 from groq import Groq
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_gigachat.chat_models import GigaChat
+
 from loguru import logger
 
 from proxy_config import setup_proxy

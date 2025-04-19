@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import asyncio
 
 from aiogram.methods import DeleteWebhook
