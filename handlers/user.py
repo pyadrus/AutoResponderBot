@@ -7,6 +7,7 @@ from loguru import logger
 
 from db.database import recording_user_data_of_the_launched_bot
 from keyboards.inline import greeting_keyboard, back_to_menu
+from messages.messages import data
 from states.groups import FormeditMainMenu, SettingsClass
 from utils.dispatcher import bot, ADMIN_CHAT_ID, router
 from utils.file_utils import load_bot_info, save_data_to_json
@@ -14,16 +15,11 @@ from utils.file_utils import load_bot_info, save_data_to_json
 # ADMIN_CHAT_ID должен быть списком строк, а не чисел
 ADMIN_CHAT_ID = ["535185511"]
 
-# Путь к JSON файлу, где будут храниться рабочие часы
-WORKING_HOURS_FILE = 'messages/working_hours.json'
-
 
 @router.message(Command("start"))
 async def user_start_handler(message: Message) -> None:
     """Обработчик команды /start. Главное меню бота"""
     try:
-        user_id = message.from_user.id
-
         user_name = message.from_user.username
         if message.from_user.username is None:
             user_name = ''  # Установим пустую строку вместо None
@@ -35,8 +31,9 @@ async def user_start_handler(message: Message) -> None:
             user_last_name = ''
 
         user_date = message.date.strftime("%Y-%m-%d %H:%M:%S")
-        logger.info(f"{user_id} {user_name} {user_first_name} {user_last_name} {user_date}")
-        recording_user_data_of_the_launched_bot(user_id, user_name, user_first_name, user_last_name, user_date)
+        logger.info(f"{message.from_user.id} {user_name} {user_first_name} {user_last_name} {user_date}")
+        recording_user_data_of_the_launched_bot(message.from_user.id, user_name, user_first_name, user_last_name,
+                                                user_date)
         await bot.send_message(message.from_user.id,
                                load_bot_info(messages="messages/main_menu.json"),
                                reply_markup=greeting_keyboard(),
@@ -50,21 +47,16 @@ async def user_start_handler(message: Message) -> None:
 async def instructions_handlers(callback_query: types.CallbackQuery) -> None:
     """Обработчик кнопки "Назад в главное меню" """
     try:
-        user_id = callback_query.from_user.id
-
         user_name = callback_query.from_user.username
         if callback_query.from_user.username is None:
             user_name = ''  # Установим пустую строку вместо None
-
-        user_first_name = callback_query.from_user.first_name
-
         user_last_name = callback_query.from_user.last_name
         if callback_query.from_user.last_name is None:
             user_last_name = ''
 
-        logger.info(f"{user_id} {user_name} {user_first_name} {user_last_name}")
+        logger.info(f"{callback_query.from_user.id} {user_name} {callback_query.from_user.first_name} {user_last_name}")
         await bot.send_message(callback_query.from_user.id,
-                               load_bot_info(messages="messages/main_menu.json"),
+                               data['menu']['text'],
                                reply_markup=greeting_keyboard(),
                                parse_mode="HTML"
                                )
@@ -170,7 +162,7 @@ async def set_end_minute(message: Message, state: FSMContext):
         }
 
         # Сохраняем словарь в JSON файл
-        save_data_to_json(working_hours, WORKING_HOURS_FILE)
+        save_data_to_json(working_hours, 'messages/working_hours.json')
 
         await message.reply("Информация о рабочем времени обновлена.")
         # Сбрасываем состояние после успешного сохранения
@@ -191,7 +183,7 @@ async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None
             f"Пользователь запросил раздел от авторе: {callback_query.from_user.id} {user_name} {callback_query.from_user.first_name} {callback_query.from_user.last_name}")
         await bot.send_message(
             callback_query.from_user.id,
-            load_bot_info(messages="messages/about_author.json"),
+            data['about_author']['text'],
             reply_markup=back_to_menu(),
             disable_web_page_preview=True,
             parse_mode="HTML"

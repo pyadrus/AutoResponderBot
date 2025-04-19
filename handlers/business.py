@@ -31,9 +31,9 @@ def save_user_message(business_id, user_id, user_first_name, user_last_name, use
         # Сохраняем сообщение в таблице
         UserMessageTable.create(business_id=business_id, user_id=user_id, user_first_name=user_first_name,
                                 user_last_name=user_last_name, user_username=user_username, message_text=message_text)
-        print(f"Сообщение от пользователя {user_id} сохранено в таблице {UserMessageTable._meta.table_name}.")
+        logger.info(f"Сообщение от пользователя {user_id} сохранено в таблице {UserMessageTable._meta.table_name}.")
     except Exception as e:
-        print(f"Ошибка при сохранении сообщения: {e}")
+        logger.info(f"Ошибка при сохранении сообщения: {e}")
 
 
 @router.business_message()
