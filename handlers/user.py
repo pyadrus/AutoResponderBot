@@ -7,10 +7,9 @@ from loguru import logger
 
 from db.database import recording_user_data_of_the_launched_bot
 from keyboards.inline import greeting_keyboard, back_to_menu
-from messages.messages import data
 from states.groups import FormeditMainMenu, SettingsClass
 from utils.dispatcher import bot, ADMIN_CHAT_ID, router
-from utils.file_utils import save_data_to_json
+from utils.file_utils import save_data_to_json, data
 
 # ADMIN_CHAT_ID должен быть списком строк, а не чисел
 ADMIN_CHAT_ID = ["535185511"]

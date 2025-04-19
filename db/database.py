@@ -7,6 +7,7 @@ from peewee import *
 # Настройка подключения к базе данных SQLite (или другой базы данных)
 db = SqliteDatabase('db/database.db')
 
+
 class UserWrotePersonalAccount(Model):
     user_id = CharField()
     user_bot = CharField()
@@ -25,6 +26,7 @@ class UserWrotePersonalAccount(Model):
     class Meta:
         database = db
         table_name = "user_wrote_personal_account"
+
 
 # Модель для хранения сообщений пользователей
 # class UserMessage(Model):

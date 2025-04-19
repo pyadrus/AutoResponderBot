@@ -18,7 +18,7 @@ async def main():
     try:
         register_greeting_user_handler()  # Главное меню бота
         register_handle_business_message()
-        register_settings_handler() # Настройки бота
+        register_settings_handler()  # Настройки бота
 
         register_getting_customer_base_handler()  # Получение клиентской базы
         try:

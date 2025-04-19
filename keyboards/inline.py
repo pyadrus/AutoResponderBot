@@ -19,5 +19,15 @@ def back_to_menu():
         inline_keyboard=[[InlineKeyboardButton(text='🔙 Назад', callback_data='back_to_menu'), ]], )
 
 
+def setting_keyboard():
+    """Клавиатура для настроек"""
+
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Выбор ИИ модели", callback_data="select_model")],
+        [InlineKeyboardButton(text="Ввести промт для ИИ модели", callback_data="enter_prompt"), ],
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='back_to_menu'), ]
+    ])
+
+
 if __name__ == '__main__':
     greeting_keyboard()

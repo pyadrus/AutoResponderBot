@@ -3,6 +3,11 @@ import json
 import os
 
 from loguru import logger
+import yaml
+
+# Считываем файл
+with open('messages/messages.yaml', 'r', encoding='utf-8') as file:
+    data = yaml.safe_load(file)
 
 
 def save_data_to_json(data, file_path):
