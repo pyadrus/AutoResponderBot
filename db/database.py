@@ -7,6 +7,16 @@ from peewee import *
 # Настройка подключения к базе данных SQLite (или другой базы данных)
 db = SqliteDatabase('db/database.db')
 
+class UserModel(Model):
+    user_id = IntegerField(unique=True)
+    selected_model = CharField()
+
+    class Meta:
+        database = db
+
+# Инициализация базы данных
+db.connect()
+db.create_tables([UserModel], safe=True)
 
 class UserWrotePersonalAccount(Model):
     user_id = CharField()
