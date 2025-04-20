@@ -4,6 +4,7 @@ import os
 from groq import Groq
 from loguru import logger
 
+from db.database import UserModel
 from proxy.proxy_config import setup_proxy
 from utils.dispatcher import GROQ_KEY
 
@@ -29,12 +30,15 @@ async def get_chat_completion(message, system_prompt):
         setup_proxy()  # Установка прокси
         client = Groq(api_key=GROQ_KEY)
 
+        # Считываем с базы данных, ИИ модель выбранную пользователем
+        user = UserModel.get_or_none(UserModel.user_id == message.from_user.id)
+        logger.info(f"User selected model: {user.selected_model}")
         chat_completion = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": message.text},
             ],
-            model="gemma2-9b-it",
+            model=f"{user.selected_model}",
         )
 
         return chat_completion.choices[0].message.content

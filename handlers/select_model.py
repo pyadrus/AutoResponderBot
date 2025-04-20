@@ -23,24 +23,15 @@ async def select_model_handler(callback_query: types.CallbackQuery) -> None:
 
 
 @router.callback_query(lambda c: c.data in [
-    "qwen-qwq-32b",
-    "deepseek-r1-distill-llama-70b",
     "gemma2-9b-it",
-    "compound_beta",
+    "compound-beta",
     "compound-beta-mini",
-    "distil-whisper-large-v3-en",
     "llama-3.1-8b-instant",
     "llama-3.3-70b-versatile",
-    "llama-guard-3-8b",
     "llama3-70b-8192",
     "llama3-8b-8192",
     "meta-llama/llama-4-maverick-17b-128e-instruct",
     "meta-llama/llama-4-scout-17b-16e-instruct",
-    "mistral-saba-24b",
-    "whisper-large-v3",
-    "whisper-large-v3-turbo",
-    "playai-tts",
-    "Nasser-PlayAI",
     "allam-2-7b"
 ])
 async def model_selection_handler(callback_query: types.CallbackQuery) -> None:
