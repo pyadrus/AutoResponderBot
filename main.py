@@ -22,8 +22,7 @@ async def main():
         register_handle_business_message()
         register_settings_handler()  # Настройки бота
 
-        register_prompt_handlers() # Ввод промта
-
+        register_prompt_handlers()  # Ввод промта
 
         register_select_model_handler()  # Выбор модели в настройках
 

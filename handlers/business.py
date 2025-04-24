@@ -76,8 +76,9 @@ async def handle_business_message(message: Message):
         # Загружаем базу знаний при запуске
         knowledge_base_content = load_knowledge_base()
 
-        system_prompt = "Ты - бот, который отвечает на вопросы пользователей."
-        ai_response = await get_chat_completion(message, system_prompt)
+        # system_prompt = "Ты - бот, который отвечает на вопросы пользователей."
+
+        ai_response = await get_chat_completion(message)
         await message.reply(f"{ai_response}")
 
         # Открываем файл и читаем данные рабочего времени

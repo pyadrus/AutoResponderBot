@@ -4,14 +4,14 @@ import os
 from groq import Groq
 from loguru import logger
 
-from db.database import UserModel
+from db.database import UserModel, AIPromt
 from proxy.proxy_config import setup_proxy
 from utils.dispatcher import GROQ_KEY
 
 user_dialogs = {}  # Словарь для хранения истории диалогов
 
 # Путь к файлу базы знаний
-KNOWLEDGE_BASE_PATH = "knowledge_base/data.txt"
+KNOWLEDGE_BASE_PATH = "db/data.txt"
 
 
 # Чтение базы знаний
@@ -21,10 +21,10 @@ def load_knowledge_base():
         with open(KNOWLEDGE_BASE_PATH, "r", encoding="utf-8") as file:
             return file.read()
     else:
-        return "База знаний не найдена. Пожалуйста, создайте файл knowledge_base/data.txt."
+        return "База знаний не найдена. Пожалуйста, создайте файл db/data.txt."
 
 
-async def get_chat_completion(message, system_prompt):
+async def get_chat_completion(message):
     """Возвращает ответ пользователя"""
     try:
         setup_proxy()  # Установка прокси
@@ -32,10 +32,12 @@ async def get_chat_completion(message, system_prompt):
 
         # Считываем с базы данных, ИИ модель выбранную пользователем
         user = UserModel.get_or_none(UserModel.user_id == message.from_user.id)
-        logger.info(f"User selected model: {user.selected_model}")
+        # Считываем промт с базы данных
+        system_prompt = AIPromt.get_or_none(AIPromt.user_id == message.from_user.id)
+
         chat_completion = client.chat.completions.create(
             messages=[
-                {"role": "system", "content": system_prompt},
+                {"role": "system", "content": system_prompt.ai_promt},
                 {"role": "user", "content": message.text},
             ],
             model=f"{user.selected_model}",
