@@ -24,7 +24,7 @@ def load_knowledge_base():
         return "База знаний не найдена. Пожалуйста, создайте файл db/data.txt."
 
 
-async def get_chat_completion(message):
+async def get_chat_completion(message, knowledge_base_content):
     """Возвращает ответ пользователя"""
     try:
         setup_proxy()  # Установка прокси
@@ -37,8 +37,8 @@ async def get_chat_completion(message):
 
         chat_completion = client.chat.completions.create(
             messages=[
-                {"role": "system", "content": system_prompt.ai_promt},
-                {"role": "user", "content": message.text},
+                {"role": "system", "content": f"{system_prompt.ai_promt} {knowledge_base_content}"},
+                {"role": "user", "content": f"{message.text}"},
             ],
             model=f"{user.selected_model}",
         )
