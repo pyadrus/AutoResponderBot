@@ -2,10 +2,19 @@
 from datetime import datetime
 
 from loguru import logger
-from peewee import *
+from peewee import SqliteDatabase, IntegerField, TextField, Model, CharField, DateTimeField
 
 # Настройка подключения к базе данных SQLite (или другой базы данных)
 db = SqliteDatabase('db/database.db')
+
+
+class AIPromt(Model):
+    user_id = IntegerField(unique=True)
+    ai_promt = TextField()
+
+    class Meta:
+        database = db
+        table_name = "ai_promt"
 
 
 class UserModel(Model):

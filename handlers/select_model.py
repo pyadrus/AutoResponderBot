@@ -4,7 +4,7 @@ from aiogram import types
 from loguru import logger
 
 from db.database import db, UserModel
-from keyboards.inline import select_model_keyboard
+from keyboards.inline import select_model_keyboard, back_to_menu
 from utils.dispatcher import bot, router
 from utils.file_utils import data
 
@@ -41,11 +41,12 @@ async def model_selection_handler(callback_query: types.CallbackQuery) -> None:
 
         # Обновление или создание записи в базе данных
         with db.atomic():
-            UserModel.insert(user_id=callback_query.from_user.id, selected_model=selected_model).on_conflict(conflict_target=[UserModel.user_id], update={UserModel.selected_model: selected_model}).execute()
+            UserModel.insert(user_id=callback_query.from_user.id, selected_model=selected_model).on_conflict(
+                conflict_target=[UserModel.user_id], update={UserModel.selected_model: selected_model}).execute()
 
         await callback_query.message.answer(
             f"Выбрана модель: {selected_model}",
-            parse_mode="HTML"
+            parse_mode="HTML", reply_markup=back_to_menu()
         )
 
         # Опционально: можно вернуться к главному меню
@@ -55,7 +56,7 @@ async def model_selection_handler(callback_query: types.CallbackQuery) -> None:
         logger.error(f"Ошибка при выборе модели: {e}")
         await callback_query.message.answer(
             "Произошла ошибка при выборе модели. Попробуйте снова.",
-            parse_mode="HTML"
+            parse_mode="HTML", reply_markup=back_to_menu(),
         )
 
 

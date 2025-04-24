@@ -5,6 +5,7 @@ from aiogram.methods import DeleteWebhook
 from loguru import logger
 
 from handlers.business import register_handle_business_message
+from handlers.entering_promt import register_prompt_handlers
 from handlers.getting_customer_base import register_getting_customer_base_handler
 from handlers.select_model import register_select_model_handler
 from handlers.settings import register_settings_handler
@@ -20,6 +21,9 @@ async def main():
         register_greeting_user_handler()  # Главное меню бота
         register_handle_business_message()
         register_settings_handler()  # Настройки бота
+
+        register_prompt_handlers() # Ввод промта
+
 
         register_select_model_handler()  # Выбор модели в настройках
 
