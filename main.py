@@ -19,20 +19,16 @@ async def main():
     """Старт бота"""
     try:
         register_greeting_user_handler()  # Главное меню бота
-        register_handle_business_message()
+        register_handle_business_message() # Обработка бизнес сообщений
         register_settings_handler()  # Настройки бота
-
         register_prompt_handlers()  # Ввод промта
-
         register_select_model_handler()  # Выбор модели в настройках
-
         register_getting_customer_base_handler()  # Получение клиентской базы
         try:
             await bot(DeleteWebhook(drop_pending_updates=True))
             await dp.start_polling(bot)
         finally:
             await bot.session.close()
-
     except Exception as e:
         logger.exception(e)
 

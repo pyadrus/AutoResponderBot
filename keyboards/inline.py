@@ -4,7 +4,6 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 def greeting_keyboard():
     """Клавиатура для приветствия"""
-
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='🕒 Изменить время работы', callback_data='change_opening_hours'), ],
         [InlineKeyboardButton(text='Получение клиентской базы', callback_data='getting_customer_base'), ],
@@ -21,7 +20,6 @@ def back_to_menu():
 
 def setting_keyboard():
     """Клавиатура для настроек"""
-
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Выбор ИИ модели", callback_data="select_model")],
         [InlineKeyboardButton(text="Ввести промт для ИИ модели", callback_data="enter_prompt"), ],
@@ -32,7 +30,6 @@ def setting_keyboard():
 def select_model_keyboard():
     """Клавиатура выбора ИИ модели"""
     return InlineKeyboardMarkup(inline_keyboard=[
-
         [InlineKeyboardButton(text='gemma2-9b-it', callback_data='gemma2-9b-it')],
         [InlineKeyboardButton(text='compound-beta', callback_data='compound-beta')],
         [InlineKeyboardButton(text='compound-beta-mini', callback_data='compound-beta-mini'), ],

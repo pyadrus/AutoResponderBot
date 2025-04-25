@@ -165,6 +165,7 @@ def recording_data_users_who_wrote_personal_account(user_id, user_bot, user_firs
 
 
 def recording_user_data_of_the_launched_bot(user_id, user_name, user_first_name, user_last_name, user_date):
+    """Запись данных о пользователей в таблицу, которые запустили бота"""
     try:
         # Создание таблицы, если она еще не создана
         db.create_tables([UserStart], safe=True)
