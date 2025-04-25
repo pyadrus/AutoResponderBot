@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import asyncio
+
 from aiogram.types import Message
 from loguru import logger
-import asyncio
+
 from ai.ai_utils import get_chat_completion, load_knowledge_base
 from db.database import recording_data_users_who_wrote_personal_account, save_user_message
 from utils.dispatcher import router, ADMIN_CHAT_ID
@@ -48,10 +50,7 @@ async def handle_business_message(message: Message):
                               message.from_user.last_name, message.from_user.username,
                               f"Сообщение от администратора: {message_text}")
 
-        # Загружаем базу знаний при запуске
-        knowledge_base_content = load_knowledge_base()
-        logger.info(f"{knowledge_base_content}")
-
+        knowledge_base_content = load_knowledge_base()  # Загружаем базу знаний при запуске
         ai_response = await get_chat_completion(message, knowledge_base_content)
         await asyncio.sleep(10)
         await message.reply(f"{ai_response}")

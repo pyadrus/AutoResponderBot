@@ -59,7 +59,7 @@ class UserStart(Model):
         logger.error(f"Ошибка: {e}")
 
 
-# Функция для создания таблицы для конкретного пользователя
+
 def create_user_table(user_id: int):
     """
     Создает таблицу с именем пользователя (user_id), если она не существует.
@@ -118,30 +118,6 @@ def recording_data_users_who_wrote_personal_account(user_id, user_bot, user_firs
     # Создание таблицы, если она еще не создана
     db.create_tables([UserWrotePersonalAccount], safe=True)
 
-    # Обработка значений None
-    if user_first_name is None:
-        user_first_name = "None"
-    if user_last_name is None:
-        user_last_name = "None"
-    if user_username is None:
-        user_username = "None"
-    if user_language_code is None:
-        user_language_code = "None"
-    if user_is_premium is None:
-        user_is_premium = "None"
-    if user_added_to_attachment_menu is None:
-        user_added_to_attachment_menu = "None"
-    if user_can_join_groups is None:
-        user_can_join_groups = "None"
-    if user_can_read_all_group_messages is None:
-        user_can_read_all_group_messages = "None"
-    if user_supports_inline_queries is None:
-        user_supports_inline_queries = "None"
-    if user_can_connect_to_business is None:
-        user_can_connect_to_business = "None"
-    if user_has_main_web_app is None:
-        user_has_main_web_app = "None"
-
     # Удаляем дубликаты по user_id
     UserWrotePersonalAccount.delete().where(UserWrotePersonalAccount.user_id == user_id).execute()
 
@@ -149,17 +125,17 @@ def recording_data_users_who_wrote_personal_account(user_id, user_bot, user_firs
     user_wrote_personal_account = UserWrotePersonalAccount.create(
         user_id=user_id,
         user_bot=user_bot,
-        user_first_name=user_first_name,
-        user_last_name=user_last_name,
-        user_username=user_username,
-        user_language_code=user_language_code,
-        user_is_premium=user_is_premium,
-        user_added_to_attachment_menu=user_added_to_attachment_menu,
-        user_can_join_groups=user_can_join_groups,
-        user_can_read_all_group_messages=user_can_read_all_group_messages,
-        user_supports_inline_queries=user_supports_inline_queries,
-        user_can_connect_to_business=user_can_connect_to_business,
-        user_has_main_web_app=user_has_main_web_app,
+        user_first_name=user_first_name or "None",
+        user_last_name=user_last_name or "None",
+        user_username=user_username or "None",
+        user_language_code=user_language_code or "None",
+        user_is_premium=user_is_premium or "None",
+        user_added_to_attachment_menu=user_added_to_attachment_menu or "None",
+        user_can_join_groups=user_can_join_groups or "None",
+        user_can_read_all_group_messages=user_can_read_all_group_messages or "None",
+        user_supports_inline_queries=user_supports_inline_queries or "None",
+        user_can_connect_to_business=user_can_connect_to_business or "None",
+        user_has_main_web_app=user_has_main_web_app or "None",
     )
     user_wrote_personal_account.save()
 
@@ -183,7 +159,6 @@ def recording_user_data_of_the_launched_bot(user_id, user_name, user_first_name,
         logger.error(f"Ошибка: {e}")
 
 
-# Пример использования
 def save_user_message(business_id, user_id, user_first_name, user_last_name, user_username, message_text):
     """
     Сохраняет сообщение в таблице пользователя.
