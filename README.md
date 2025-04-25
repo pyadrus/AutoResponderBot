@@ -25,33 +25,18 @@
 Клонируйте репозиторий и установите необходимые зависимости:
 
 ```bash
-git clone https://github.com/ваш-пользователь/AutoResponderBot.git
+git clone https://github.com/pyadrus/AutoResponderBot
 cd AutoResponderBot
 pip install -r requirements.txt
 ```
 
 ## 2. Настройка
 
-1. Создайте файл `config.env` в папке `settings` и добавьте ваши переменные окружения:
+1. Создайте файл `.env` в папке `config` и добавьте ваши переменные окружения:
 
     ```env
     Копировать код
     BOT_TOKEN=ВашТокенБота
-    ```
-
-2. Отредактируйте рабочие часы в файле `messages/working_hours.json`:
-    ```json
-    
-    {
-        "start": {
-            "hour": "9",
-            "minute": "0"
-        },
-        "end": {
-            "hour": "18",
-            "minute": "0"
-        }
-    }
     ```
 
 Убедитесь, что все необходимые файлы находятся в папке data.
