@@ -4,21 +4,24 @@ import os
 from groq import Groq
 from loguru import logger
 
+from configs.configs import get_proxy_user, get_proxy_password, get_proxy_port, get_proxy_ip
 from db.database import UserModel, AIPromt
-from proxy.proxy_config import setup_proxy
 from utils.dispatcher import GROQ_KEY
 
 user_dialogs = {}  # Словарь для хранения истории диалогов
 
-# Путь к файлу базы знаний
-KNOWLEDGE_BASE_PATH = "db/data.txt"
+
+def setup_proxy():
+    # Указываем прокси для HTTP и HTTPS
+    os.environ['http_proxy'] = f"http://{get_proxy_user()}:{get_proxy_password()}@{get_proxy_ip()}:{get_proxy_port()}"
+    os.environ['https_proxy'] = f"http://{get_proxy_user()}:{get_proxy_password()}@{get_proxy_ip()}:{get_proxy_port()}"
 
 
 # Чтение базы знаний
 def load_knowledge_base():
     """Загружает содержимое файла базы знаний."""
-    if os.path.exists(KNOWLEDGE_BASE_PATH):
-        with open(KNOWLEDGE_BASE_PATH, "r", encoding="utf-8") as file:
+    if os.path.exists("db/data.txt"):
+        with open("db/data.txt", "r", encoding="utf-8") as file:
             return file.read()
     else:
         return "База знаний не найдена. Пожалуйста, создайте файл db/data.txt."
