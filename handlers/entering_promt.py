@@ -37,11 +37,9 @@ async def save_prompt_handler(message: Message, state: FSMContext) -> None:
 
     try:
 
-
         with db.atomic():
             AIPromt.insert(user_id=message.from_user.id, ai_promt=prompt).on_conflict(
                 conflict_target=[AIPromt.user_id], update={AIPromt.ai_promt: prompt}).execute()
-
 
         await message.answer("Промт сохранен!", reply_markup=back_to_menu())
     except Exception as e:

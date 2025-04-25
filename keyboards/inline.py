@@ -20,6 +20,7 @@ def setting_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Выбор ИИ модели", callback_data="select_model")],
         [InlineKeyboardButton(text="Ввести промт для ИИ модели", callback_data="enter_prompt"), ],
+        [InlineKeyboardButton(text="Замена базы знаний", callback_data="replacing_knowledge_base"), ],
         [InlineKeyboardButton(text='🔙 Назад', callback_data='back_to_menu'), ]
     ])
 

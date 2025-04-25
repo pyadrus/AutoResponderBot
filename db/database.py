@@ -59,7 +59,6 @@ class UserStart(Model):
         logger.error(f"Ошибка: {e}")
 
 
-
 def create_user_table(user_id: int):
     """
     Создает таблицу с именем пользователя (user_id), если она не существует.
