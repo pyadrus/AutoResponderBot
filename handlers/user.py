@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from db.database import recording_user_data_of_the_launched_bot
-from keyboards.inline import greeting_keyboard, back_to_menu
+from keyboards.inline import greeting_keyboard
 from utils.dispatcher import bot, router
 from utils.file_utils import data
 
@@ -41,26 +41,10 @@ async def instructions_handlers(callback_query: types.CallbackQuery) -> None:
         logger.error(f"Ошибка: {e}")
 
 
-@router.callback_query(F.data == "about_the_author")
-async def about_the_author_handlers(callback_query: types.CallbackQuery) -> None:
-    """Об авторе"""
-    try:
-        await bot.send_message(
-            chat_id=callback_query.from_user.id,
-            text=data['about_author']['text'],
-            reply_markup=back_to_menu(),
-            disable_web_page_preview=True,
-            parse_mode="HTML"
-        )
-    except Exception as e:
-        logger.error(f"Ошибка: {e}")
-
-
 def register_greeting_user_handler():
     """Регистрация обработчиков для бота"""
     router.message.register(user_start_handler)
     router.message.register(instructions_handlers)  # обработчик для кнопки "Назад"
-    router.message.register(about_the_author_handlers)  # Об авторе
 
 
 if __name__ == "__main__":

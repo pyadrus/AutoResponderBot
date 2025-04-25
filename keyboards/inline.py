@@ -7,8 +7,6 @@ def greeting_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Получение клиентской базы', callback_data='getting_customer_base'), ],
         [InlineKeyboardButton(text='Настройки', callback_data='settings'), ],
-        [InlineKeyboardButton(text='👨‍💻 Об авторе', callback_data='about_the_author'),
-         InlineKeyboardButton(text='❓ Помощь', callback_data='help')],
     ])
 
 
