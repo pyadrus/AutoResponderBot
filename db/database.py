@@ -7,6 +7,14 @@ from peewee import SqliteDatabase, IntegerField, TextField, Model, CharField, Da
 # Настройка подключения к базе данных SQLite (или другой базы данных)
 db = SqliteDatabase('db/database.db')
 
+class TimeSend(Model):
+    user_id = IntegerField(unique=True)
+    time_send = TextField()
+
+    class Meta:
+        database = db
+        table_name = "time_send"
+
 
 class AIPromt(Model):
     user_id = IntegerField(unique=True)

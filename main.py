@@ -7,6 +7,7 @@ from loguru import logger
 from handlers.business import register_handle_business_message
 from handlers.entering_promt import register_prompt_handlers
 from handlers.getting_customer_base import register_getting_customer_base_handler
+from handlers.recording_response_time import register_time_handlers
 from handlers.replacing_knowledge_base import register_replacing_knowledge_base_handlers
 from handlers.select_model import register_select_model_handler
 from handlers.settings import register_settings_handler
@@ -26,6 +27,9 @@ async def main():
         register_select_model_handler()  # Выбор модели в настройках
         register_getting_customer_base_handler()  # Получение клиентской базы
         register_replacing_knowledge_base_handlers()  # Замена базы знаний
+
+        register_time_handlers()  # Запись времени в базу данных
+
         try:
             await bot(DeleteWebhook(drop_pending_updates=True))
             await dp.start_polling(bot)
