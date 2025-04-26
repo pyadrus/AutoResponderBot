@@ -2,8 +2,8 @@
 import json
 import os
 
-from loguru import logger
 import yaml
+from loguru import logger
 
 # Считываем файл
 with open('messages/messages.yaml', 'r', encoding='utf-8') as file:
