@@ -42,9 +42,14 @@ async def handle_business_message(message: Message):
         }
         recording_data_users_who_wrote_personal_account(**user_data)
         if user_id != int(ADMIN_CHAT_ID):
-            save_user_message(message_text_business_connection, user_id, message.from_user.first_name,
-                              message.from_user.last_name, message.from_user.username,
-                              f"Сообщение от пользователя: {message_text}")
+            save_user_message(
+                message_text_business_connection,
+                user_id,
+                message.from_user.first_name,
+                message.from_user.last_name,
+                message.from_user.username,
+                f"Сообщение от пользователя: {message_text}"
+            )
         else:
             save_user_message(message_text_business_connection, user_id, message.from_user.first_name,
                               message.from_user.last_name, message.from_user.username,
