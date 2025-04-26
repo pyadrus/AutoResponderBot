@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from ai.ai_utils import get_chat_completion, load_knowledge_base
-from db.database import recording_data_users_who_wrote_personal_account, save_user_message
+from db.database import recording_data_users_who_wrote_personal_account, save_user_message, TimeSend
 from utils.dispatcher import router, ADMIN_CHAT_ID
 
 # Глобальные словари для хранения состояния пользователей
@@ -57,7 +57,10 @@ async def handle_business_message(message: Message):
 
         knowledge_base_content = load_knowledge_base()  # Загружаем базу знаний при запуске
         ai_response = await get_chat_completion(message, knowledge_base_content)
-        await asyncio.sleep(10)
+
+        timeout_seconds = TimeSend.get_or_none(TimeSend.user_id == message.from_user.id)
+
+        await asyncio.sleep(int(timeout_seconds.time_send))
         await message.reply(f"{ai_response}")
 
     except Exception as e:
