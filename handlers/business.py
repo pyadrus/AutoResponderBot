@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from ai.ai_utils import get_chat_completion, load_knowledge_base
-from db.database import recording_data_users_who_wrote_personal_account, save_user_message, TimeSend
+from db.database import recording_data_users_who_wrote_personal_account, save_user_message
 from utils.dispatcher import router, ADMIN_CHAT_ID
 
 # Глобальные словари для хранения состояния пользователей
