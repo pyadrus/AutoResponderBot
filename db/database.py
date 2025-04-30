@@ -7,6 +7,7 @@ from peewee import SqliteDatabase, IntegerField, TextField, Model, CharField, Da
 # Настройка подключения к базе данных SQLite (или другой базы данных)
 db = SqliteDatabase('db/database.db')
 
+
 class TimeSend(Model):
     user_id = IntegerField(unique=True)
     time_send = TextField()
@@ -17,20 +18,23 @@ class TimeSend(Model):
 
 
 class AIPromt(Model):
-    user_id = IntegerField(unique=True)
+    """Промт для ИИ"""
     ai_promt = TextField()
 
     class Meta:
         database = db
         table_name = "ai_promt"
+        primary_key = False  # Для запрета автоматически создающегося поля id (как первичный ключ)
 
 
 class UserModel(Model):
-    user_id = IntegerField(unique=True)
+    """ИИ модель"""
     selected_model = CharField()
 
     class Meta:
         database = db
+        table_name = "usermodel"
+        primary_key = False  # Для запрета автоматически создающегося поля id (как первичный ключ)
 
 
 class UserWrotePersonalAccount(Model):

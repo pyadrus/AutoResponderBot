@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher, Router
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path='settings/configs.env')
+load_dotenv(dotenv_path='configs/.env')
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')  # Токен бота
 SECRET_KEY = os.getenv('SECRET_KEY')  # Секретный ключ, для оплаты

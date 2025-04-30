@@ -39,10 +39,14 @@ async def model_selection_handler(callback_query: types.CallbackQuery) -> None:
     try:
         selected_model = callback_query.data
 
+        # Создаем таблицу, если она не создана ранее
+        db.create_tables([UserModel], safe=True)
         # Обновление или создание записи в базе данных
         with db.atomic():
-            UserModel.insert(user_id=callback_query.from_user.id, selected_model=selected_model).on_conflict(
-                conflict_target=[UserModel.user_id], update={UserModel.selected_model: selected_model}).execute()
+            # Удаляем все старые записи (если их несколько)
+            UserModel.delete().execute()
+            # Вставляем новую
+            UserModel.insert(selected_model=selected_model).execute()
 
         await callback_query.message.answer(
             f"Выбрана модель: {selected_model}",

@@ -32,14 +32,15 @@ async def save_prompt_handler(message: Message, state: FSMContext) -> None:
     await state.update_data(prompt=prompt)
     data["prompt"] = prompt
 
-    # Create table if it doesn't exist
+    # Создаем таблицу, если она не создана ранее
     db.create_tables([AIPromt], safe=True)
 
     try:
-
         with db.atomic():
-            AIPromt.insert(user_id=message.from_user.id, ai_promt=prompt).on_conflict(
-                conflict_target=[AIPromt.user_id], update={AIPromt.ai_promt: prompt}).execute()
+            # Удаляем все старые записи (если их несколько)
+            AIPromt.delete().execute()
+            # Вставляем новую
+            AIPromt.insert(ai_promt=prompt).execute()
 
         await message.answer("Промт сохранен!", reply_markup=back_to_menu())
     except Exception as e:

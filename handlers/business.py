@@ -58,9 +58,9 @@ async def handle_business_message(message: Message):
         knowledge_base_content = load_knowledge_base()  # Загружаем базу знаний при запуске
         ai_response = await get_chat_completion(message, knowledge_base_content)
 
-        timeout_seconds = TimeSend.get_or_none(TimeSend.user_id == message.from_user.id)
-
-        await asyncio.sleep(int(timeout_seconds.time_send))
+        # timeout_seconds = TimeSend.get_or_none(TimeSend.user_id == message.from_user.id)
+        # logger.info(f"Время ответа: {timeout_seconds.time_send}")
+        await asyncio.sleep(int(2))
         await message.reply(f"{ai_response}")
 
     except Exception as e:

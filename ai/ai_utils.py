@@ -34,18 +34,23 @@ async def get_chat_completion(message, knowledge_base_content):
         client = Groq(api_key=GROQ_KEY)
 
         # Считываем с базы данных, ИИ модель выбранную пользователем
-        user = UserModel.get_or_none(UserModel.user_id == message.from_user.id)
+        user_record = UserModel.get_or_none()
+        user = user_record.selected_model if user_record else ""
+        print(user)
         # Считываем промт с базы данных
-        system_prompt = AIPromt.get_or_none(AIPromt.user_id == message.from_user.id)
+        system_prompt_record = AIPromt.get_or_none()
+        system_prompt = system_prompt_record.ai_promt if system_prompt_record else ""
+        print(system_prompt)
 
         chat_completion = client.chat.completions.create(
             messages=[
-                {"role": "system", "content": f"{system_prompt.ai_promt} {knowledge_base_content}"},
+                {"role": "system", "content": f"{system_prompt} {knowledge_base_content}"},
                 {"role": "user", "content": f"{message.text}"},
             ],
-            model=f"{user.selected_model}",
+            model=f"{user}",
         )
 
         return chat_completion.choices[0].message.content
     except Exception as e:
         logger.exception(e)
+        return None
