@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher, Router
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path='configs/.env')
+load_dotenv(dotenv_path='.env')
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')  # Токен бота
 ADMIN_CHAT_ID = os.getenv('ADMIN_CHAT_ID')  # ID магазина
