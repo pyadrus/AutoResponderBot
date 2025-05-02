@@ -6,11 +6,13 @@ from dotenv import load_dotenv
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
+
 def get_telegram_admin_id() -> str:
     admin_id = os.getenv("ADMIN_ID")
     if not admin_id:
         raise ValueError("ADMIN_ID не найден в переменных окружения.")
     return admin_id
+
 
 # Функции для получения переменных окружения
 def get_groq_api_key() -> str:
