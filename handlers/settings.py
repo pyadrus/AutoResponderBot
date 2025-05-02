@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from aiogram import F
 from aiogram import types
-from loguru import logger
 
-from configs.configs import get_telegram_admin_id
 from keyboards.inline import setting_keyboard
-from utils.dispatcher import bot, router
+from utils.dispatcher import bot, router, ADMIN_ID
 from utils.file_utils import data
 
 
@@ -16,7 +14,7 @@ async def settings_handler(callback_query: types.CallbackQuery) -> None:
     :param callback_query: Объект CallbackQuery
     :returns: None
     """
-    if callback_query.from_user.id != int(get_telegram_admin_id()): # Преобразование в int, чтобы сравнивать с id пользователя
+    if callback_query.from_user.id != int(ADMIN_ID):
         await callback_query.answer("У вас нет прав для выполнения этой команды!", show_alert=True)
         return
 

@@ -8,11 +8,13 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path='configs/.env')
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')  # Токен бота
-SECRET_KEY = os.getenv('SECRET_KEY')  # Секретный ключ, для оплаты
-ACCOUNT_ID = os.getenv('ACCOUNT_ID')  # ID магазина
 ADMIN_CHAT_ID = os.getenv('ADMIN_CHAT_ID')  # ID магазина
-GIGA_CHAT = os.getenv('GIGA_CHAT')  # GIGA_CHAT
 GROQ_KEY = os.getenv('GROQ_KEY')  # GROQ_KEY
+ADMIN_ID = os.getenv("ADMIN_ID")  # ADMIN_ID
+USER = os.getenv('USER')  # логин для прокси
+PASSWORD = os.getenv('PASSWORD')  # пароль для прокси
+PORT = os.getenv('PORT')  # порт для прокси
+IP = os.getenv('IP')  # IP для прокси
 
 bot = Bot(token=BOT_TOKEN)
 

@@ -4,17 +4,16 @@ import os
 from groq import Groq
 from loguru import logger
 
-from configs.configs import get_proxy_user, get_proxy_password, get_proxy_port, get_proxy_ip
 from db.database import UserModel, AIPromt
-from utils.dispatcher import GROQ_KEY
+from utils.dispatcher import GROQ_KEY, USER, PASSWORD, PORT, IP
 
 user_dialogs = {}  # Словарь для хранения истории диалогов
 
 
 def setup_proxy():
     # Указываем прокси для HTTP и HTTPS
-    os.environ['http_proxy'] = f"http://{get_proxy_user()}:{get_proxy_password()}@{get_proxy_ip()}:{get_proxy_port()}"
-    os.environ['https_proxy'] = f"http://{get_proxy_user()}:{get_proxy_password()}@{get_proxy_ip()}:{get_proxy_port()}"
+    os.environ['http_proxy'] = f"http://{USER}:{PASSWORD}@{IP}:{PORT}"
+    os.environ['https_proxy'] = f"http://{USER}:{PASSWORD}@{IP}:{PORT}"
 
 
 # Чтение базы знаний
