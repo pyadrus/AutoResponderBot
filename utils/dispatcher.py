@@ -16,8 +16,7 @@ GROQ_KEY = os.getenv('GROQ_KEY')  # GROQ_KEY
 
 bot = Bot(token=BOT_TOKEN)
 
-storage = MemoryStorage()  # Хранилище
-dp = Dispatcher(storage=storage)
+dp = Dispatcher(storage=MemoryStorage())
 
 router = Router()
 dp.include_router(router)

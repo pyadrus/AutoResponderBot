@@ -45,7 +45,3 @@ def register_greeting_user_handler():
     """Регистрация обработчиков для бота"""
     router.message.register(user_start_handler)
     router.message.register(instructions_handlers)  # обработчик для кнопки "Назад"
-
-
-if __name__ == "__main__":
-    register_greeting_user_handler()

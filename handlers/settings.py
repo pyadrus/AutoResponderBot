@@ -13,15 +13,10 @@ from utils.file_utils import data
 async def settings_handler(callback_query: types.CallbackQuery) -> None:
     """
     Меню настроек Telegram бота
-
     :param callback_query: Объект CallbackQuery
     :returns: None
     """
-    admin_id = int(get_telegram_admin_id())  # Преобразование в int, чтобы сравнивать с id пользователя
-    user_id = callback_query.from_user.id
-
-    if user_id != admin_id:
-        logger.warning(f"Пользователь {user_id} попытался получить доступ к настройкам")
+    if callback_query.from_user.id != int(get_telegram_admin_id()): # Преобразование в int, чтобы сравнивать с id пользователя
         await callback_query.answer("У вас нет прав для выполнения этой команды!", show_alert=True)
         return
 

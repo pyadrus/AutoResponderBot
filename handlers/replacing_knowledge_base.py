@@ -30,15 +30,11 @@ async def save_replacing_knowledge_base(message: Message, state: FSMContext) -> 
             return
 
         # Загружаем файл
-        file_id = message.document.file_id
-        file = await bot.get_file(file_id)
-        file_path = file.file_path
-
-        # Полный путь для сохранения файла
-        local_path = f"db/{message.document.file_name}"
+        file = await bot.get_file(message.document.file_id)
 
         # Скачиваем файл
-        await bot.download_file(file_path, destination=local_path)
+        await bot.download_file(file.file_path,
+                                destination=f"db/{message.document.file_name}")  # Полный путь для сохранения файла
 
         await message.answer("Файл успешно загружен!", reply_markup=back_to_menu())
     except Exception as e:

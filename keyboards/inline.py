@@ -11,8 +11,8 @@ def greeting_keyboard():
 
 
 def back_to_menu():
-    return InlineKeyboardMarkup(
-        inline_keyboard=[[InlineKeyboardButton(text='🔙 Назад', callback_data='back_to_menu'), ]], )
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='🔙 Назад', callback_data='back_to_menu'), ]], )
 
 
 def setting_keyboard():
